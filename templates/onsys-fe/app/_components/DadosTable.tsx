@@ -1,13 +1,26 @@
-"use client"
+"use client";
 
-import { Button } from "@/_components/ui/button"
-import { Badge } from "@/_components/ui/badge"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/_components/ui/dropdown-menu"
-import { MoreHorizontal, Trash } from "lucide-react"
-import Link from "next/link"
-import DataTable from "@/_components/DataTable"
+import { MoreHorizontal, Trash } from "lucide-react";
+import Link from "next/link";
+import DataTable from "@/_components/DataTable";
+import { Badge } from "@/_components/ui/badge";
+import { Button } from "@/_components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/_components/ui/dropdown-menu";
 
-export default function DadosTable({ dadosList, accountId }: { dadosList: any[], accountId: string }) {
+export default function DadosTable({
+  dadosList,
+  accountId,
+}: {
+  dadosList: any[];
+  accountId: string;
+}) {
   const columns = [
     {
       key: "titulo",
@@ -28,7 +41,7 @@ export default function DadosTable({ dadosList, accountId }: { dadosList: any[],
         </Badge>
       ),
     },
-  ]
+  ];
 
   const renderActions = (item: any) => (
     <DropdownMenu>
@@ -50,7 +63,9 @@ export default function DadosTable({ dadosList, accountId }: { dadosList: any[],
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 
-  return <DataTable columns={columns} data={dadosList} actions={renderActions} />
+  return (
+    <DataTable columns={columns} data={dadosList} actions={renderActions} />
+  );
 }

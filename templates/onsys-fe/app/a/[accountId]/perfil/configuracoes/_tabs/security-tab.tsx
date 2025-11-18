@@ -1,8 +1,14 @@
-'use client';
+"use client";
 
-import { useState, FormEvent } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/_components/ui/card";
+import { type FormEvent, useState } from "react";
 import { Button } from "@/_components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/_components/ui/card";
 import { Input } from "@/_components/ui/input";
 import { Label } from "@/_components/ui/label";
 
@@ -18,9 +24,11 @@ export default function SecurityTab() {
     setSuccess(null);
 
     const form = e.currentTarget;
-    const currentPassword = (form["current-password"] as HTMLInputElement).value;
+    const currentPassword = (form["current-password"] as HTMLInputElement)
+      .value;
     const newPassword = (form["new-password"] as HTMLInputElement).value;
-    const confirmPassword = (form["confirm-password"] as HTMLInputElement).value;
+    const confirmPassword = (form["confirm-password"] as HTMLInputElement)
+      .value;
 
     if (newPassword !== confirmPassword) {
       setError("A nova senha e a confirmação não coincidem.");
@@ -53,7 +61,9 @@ export default function SecurityTab() {
       <Card>
         <CardHeader>
           <CardTitle>Alterar Senha</CardTitle>
-          <CardDescription>Mantenha sua conta segura com uma senha forte</CardDescription>
+          <CardDescription>
+            Mantenha sua conta segura com uma senha forte
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           {error && <p className="text-red-500">{error}</p>}
@@ -76,7 +86,9 @@ export default function SecurityTab() {
             </div>
 
             <div className="flex justify-end gap-4">
-              <Button variant="outline" type="reset">Cancelar</Button>
+              <Button variant="outline" type="reset">
+                Cancelar
+              </Button>
               <Button type="submit" disabled={saving}>
                 {saving ? "Alterando..." : "Alterar Senha"}
               </Button>
@@ -88,7 +100,9 @@ export default function SecurityTab() {
       <Card>
         <CardHeader>
           <CardTitle>Autenticação de Dois Fatores</CardTitle>
-          <CardDescription>Adicione uma camada extra de segurança à sua conta</CardDescription>
+          <CardDescription>
+            Adicione uma camada extra de segurança à sua conta
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-between">
@@ -98,7 +112,9 @@ export default function SecurityTab() {
                 Autenticação de dois fatores desativada
               </p>
             </div>
-            <Button disabled variant="outline">Ativar</Button>
+            <Button disabled variant="outline">
+              Ativar
+            </Button>
           </div>
         </CardContent>
       </Card>

@@ -1,40 +1,57 @@
-import { Button } from "@/_components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/_components/ui/card"
-import { Input } from "@/_components/ui/input"
-import { Label } from "@/_components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/_components/ui/select"
-import { Textarea } from "@/_components/ui/textarea"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/_components/ui/tabs"
-import { Badge } from "@/_components/ui/badge"
-import { ArrowLeft } from "lucide-react"
-import Link from "next/link"
-import { prisma } from "@/_lib/prisma"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/auth"
-import { revalidatePath } from "next/cache"
-import { FormSubmitButton } from "@/_components/form-submit-button"
+import { ArrowLeft } from "lucide-react";
+import { revalidatePath } from "next/cache";
+import Link from "next/link";
+import { getServerSession } from "next-auth";
+import { FormSubmitButton } from "@/_components/form-submit-button";
+import { Badge } from "@/_components/ui/badge";
+import { Button } from "@/_components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/_components/ui/card";
+import { Input } from "@/_components/ui/input";
+import { Label } from "@/_components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/_components/ui/select";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/_components/ui/tabs";
+import { Textarea } from "@/_components/ui/textarea";
+import { prisma } from "@/_lib/prisma";
+import { authOptions } from "@/auth";
 
 // ======================================
 // Server Action: Atualizar Dado
 // ======================================
 async function updateDadoAction(formData: FormData) {
-  "use server"
+  "use server";
 
-  const id = Number(formData.get("id"))
-  const accountId = Number(formData.get("accountId"))
-  const titulo = String(formData.get("titulo") ?? "")
-  const descricao = String(formData.get("descricao") ?? "")
-  const conteudo = String(formData.get("conteudo") ?? "")
-  const statusId = Number(formData.get("statusId"))
-  const usuarioId = Number(formData.get("usuarioId"))
+  const id = Number(formData.get("id"));
+  const accountId = Number(formData.get("accountId"));
+  const titulo = String(formData.get("titulo") ?? "");
+  const descricao = String(formData.get("descricao") ?? "");
+  const conteudo = String(formData.get("conteudo") ?? "");
+  const statusId = Number(formData.get("statusId"));
+  const usuarioId = Number(formData.get("usuarioId"));
 
   if (!id || !accountId || !titulo || !statusId)
-    throw new Error("Campos obrigatórios ausentes")
+    throw new Error("Campos obrigatórios ausentes");
 
   await prisma.dados.update({
     where: { id },
     data: { titulo, descricao, conteudo, statusId },
-  })
+  });
 
   await prisma.historico.create({
     data: {
@@ -44,9 +61,9 @@ async function updateDadoAction(formData: FormData) {
       acao: "EDITADO",
       descricao: "Dado atualizado com sucesso",
     },
-  })
+  });
 
-  revalidatePath(`/a/${accountId}/dados/${id}`)
+  revalidatePath(`/a/${accountId}/dados/${id}`);
 }
 
 // ======================================
@@ -55,12 +72,12 @@ async function updateDadoAction(formData: FormData) {
 export default async function DadoDetalhesPage({
   params,
 }: {
-  params: Promise<{ id: string; accountId: string }>
+  params: Promise<{ id: string; accountId: string }>;
 }) {
-  const { id, accountId } = await params
-  const dadoId = Number(id)
-  const accId = Number(accountId)
-  const session = await getServerSession(authOptions)
+  const { id, accountId } = await params;
+  const dadoId = Number(id);
+  const _accId = Number(accountId);
+  const session = await getServerSession(authOptions);
 
   const dado = await prisma.dados.findUnique({
     where: { id: dadoId },
@@ -71,11 +88,11 @@ export default async function DadoDetalhesPage({
         orderBy: { criadoEm: "desc" },
       },
     },
-  })
+  });
 
-  const statusItems = await prisma.tipoStatus.findMany()
+  const statusItems = await prisma.tipoStatus.findMany();
 
-  if (!dado) return <p>Dado não encontrado.</p>
+  if (!dado) return <p>Dado não encontrado.</p>;
 
   return (
     <div className="space-y-6">
@@ -102,9 +119,7 @@ export default async function DadoDetalhesPage({
           </div>
         </div>
 
-        <FormSubmitButton form="formDado">
-          Salvar Alterações
-        </FormSubmitButton>
+        <FormSubmitButton form="formDado">Salvar Alterações</FormSubmitButton>
       </div>
 
       <Tabs defaultValue="informacoes" className="space-y-4">
@@ -124,20 +139,36 @@ export default async function DadoDetalhesPage({
             </CardHeader>
 
             <CardContent className="space-y-6">
-              <form id="formDado" className="space-y-6" action={updateDadoAction}>
+              <form
+                id="formDado"
+                className="space-y-6"
+                action={updateDadoAction}
+              >
                 <input type="hidden" name="id" value={dado.id} />
                 <input type="hidden" name="accountId" value={accountId} />
-                <input type="hidden" name="usuarioId" value={session?.user?.id ?? ""} />
+                <input
+                  type="hidden"
+                  name="usuarioId"
+                  value={session?.user?.id ?? ""}
+                />
 
                 <div className="grid gap-6 md:grid-cols-2">
                   <div className="space-y-2">
                     <Label htmlFor="titulo">Título *</Label>
-                    <Input id="titulo" name="titulo" defaultValue={dado.titulo} required />
+                    <Input
+                      id="titulo"
+                      name="titulo"
+                      defaultValue={dado.titulo}
+                      required
+                    />
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="statusId">Status *</Label>
-                    <Select name="statusId" defaultValue={String(dado.statusId)}>
+                    <Select
+                      name="statusId"
+                      defaultValue={String(dado.statusId)}
+                    >
                       <SelectTrigger id="statusId">
                         <SelectValue placeholder="Selecione o status" />
                       </SelectTrigger>
@@ -184,7 +215,9 @@ export default async function DadoDetalhesPage({
                   <div className="space-y-2">
                     <Label>Atualizado em</Label>
                     <Input
-                      value={new Date(dado.atualizadoEm).toLocaleString("pt-BR")}
+                      value={new Date(dado.atualizadoEm).toLocaleString(
+                        "pt-BR",
+                      )}
                       disabled
                     />
                   </div>
@@ -230,5 +263,5 @@ export default async function DadoDetalhesPage({
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }

@@ -1,17 +1,24 @@
-"use client"
+"use client";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/_components/ui/tabs"
-import { User, Bell, Shield, Palette } from "lucide-react"
-import ProfileTab from "./_tabs/profile-tab"
-import NotificationsTab from "./_tabs/notifications-tab"
-import SecurityTab from "./_tabs/security-tab"
-import AppearanceTab from "./_tabs/appearance-tab"
+import { Bell, Palette, Shield, User } from "lucide-react";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/_components/ui/tabs";
+import AppearanceTab from "./_tabs/appearance-tab";
+import NotificationsTab from "./_tabs/notifications-tab";
+import ProfileTab from "./_tabs/profile-tab";
+import SecurityTab from "./_tabs/security-tab";
 
 export default function PerfilConfiguracoesPage() {
   return (
     <div>
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Configurações do Perfil</h1>
+        <h1 className="text-3xl font-bold tracking-tight">
+          Configurações do Perfil
+        </h1>
         <p className="text-muted-foreground">
           Gerencie suas informações pessoais e preferências
         </p>
@@ -50,5 +57,5 @@ export default function PerfilConfiguracoesPage() {
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }

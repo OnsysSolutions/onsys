@@ -1,114 +1,138 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Account, Convite, TipoUsuario, Usuario } from "@prisma/client";
-import { ErrorResponse } from "@/_lib/types";
-import InviteStatusCard from "@/_components/invite-status-card";
+
 import InviteInfoCard from "@/_components/invite-info-card";
+import InviteStatusCard from "@/_components/invite-status-card";
 import InviteAuthDialog from "./invite-auth-dialog";
-import InviteLoginModal from "./invite-login-modal";
+import InviteLoginModal, { MockConvite } from "./invite-login-modal";
 import InviteSignupModal from "./invite-signup-modal";
 
-export type InviteStatus = "loading" | "valid" | "expired" | "accepted" | "invalid" | "error";
-
-export interface InviteData {
-  email: string;
-  role: string;
-  accountName: string;
-  invitedBy: string;
-  expiresAt: string;
-  createdAt: string;
-}
+export type InviteStatus =
+  | "loading"
+  | "valid"
+  | "expired"
+  | "accepted"
+  | "invalid"
+  | "error";
 
 export default function InvitePage() {
   const params = useParams();
   const router = useRouter();
   const token = params.token as string;
 
-  const [inviteData, setInviteData] = useState<InviteData | null>(null);
-  const [convite, setConvite] = useState<Convite | null>(null);
+  const [inviteData, setInviteData] = useState<MockConvite | null>(null);
   const [status, setStatus] = useState<InviteStatus>("loading");
+
   const [isAccepting, setIsAccepting] = useState(false);
   const [isDeclining, setIsDeclining] = useState(false);
+
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [openLogin, setOpenLogin] = useState(false);
   const [openSignup, setOpenSignup] = useState(false);
 
+  // ----------------------------
+  // 🔥 MOCK DATA (dummy)
+  // ----------------------------
+  const MOCK_INVITE: MockConvite = {
+    email: "johndoe@example.com",
+    role: "Administrador",
+    accountName: "OnSys Solutions",
+    invitedBy: "Ana Oliveira",
+    expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
+    createdAt: new Date().toISOString(),
+    aceito: false,
+    expiracao: new Date(Date.now() + 1000 * 60 * 60 * 24),
+    tipoStatusid: 1,
+    accountId: "1",
+  };
+
+  // ----------------------------------------------------
+  // FAKE VALIDATION (simula chamada à API/Prisma)
+  // ----------------------------------------------------
   useEffect(() => {
     const validateInvite = async () => {
-      try {
-        setStatus("loading");
-        const res = await fetch(`/api/convite?token=${token}`);
-        if (!res.ok) return setStatus("invalid");
+      setStatus("loading");
 
-        const convite: Convite & { tipoUsuario: TipoUsuario, account: Account, criadoPor: Usuario } = await res.json();
-        if (convite.aceito) return setStatus("accepted");
-        if (convite.expiracao && new Date(convite.expiracao) < new Date() || convite.tipoStatusid !== 1)
-          return setStatus("expired");
+      await new Promise((res) => setTimeout(res, 500)); // simula delay
 
-        setConvite(convite);
-        setInviteData({
-          email: convite.email,
-          role: convite.tipoUsuario?.nome ?? "Desconhecido",
-          accountName: convite.account?.nome ?? "Conta não identificada",
-          invitedBy: convite.criadoPor?.nome ?? "Usuário desconhecido",
-          expiresAt: convite.expiracao?.toString() ?? new Date().toISOString(),
-          createdAt: convite.criadoEm.toString() ?? new Date().toISOString(),
-        });
-        setStatus("valid");
-      } catch {
-        setStatus("error");
+      // ❌ token inválido no mock
+      if (!token || token === "xxx") {
+        return setStatus("invalid");
       }
+
+      // ❌ convite expirado
+      if (MOCK_INVITE.expiracao < new Date()) {
+        return setStatus("expired");
+      }
+
+      // ❌ convite já aceito
+      if (MOCK_INVITE.aceito) {
+        return setStatus("accepted");
+      }
+
+      // ✔ válido
+      setInviteData({
+        email: MOCK_INVITE.email,
+        role: MOCK_INVITE.role,
+        accountName: MOCK_INVITE.accountName,
+        invitedBy: MOCK_INVITE.invitedBy,
+        expiresAt: MOCK_INVITE.expiresAt,
+        createdAt: MOCK_INVITE.createdAt,
+
+        // campos obrigatórios
+        accountId: MOCK_INVITE.accountId,
+        aceito: MOCK_INVITE.aceito,
+        expiracao: MOCK_INVITE.expiracao,
+        tipoStatusid: MOCK_INVITE.tipoStatusid,
+      });
+
+
+      setStatus("valid");
     };
 
     validateInvite();
-  }, [token]);
+  }, [
+    token,
+    MOCK_INVITE.accountName,
+    MOCK_INVITE.aceito,
+    MOCK_INVITE.createdAt,
+    MOCK_INVITE.email,
+    MOCK_INVITE.expiracao,
+    MOCK_INVITE.expiresAt,
+    MOCK_INVITE.invitedBy,
+    MOCK_INVITE.role,
+  ]);
 
+  // ----------------------------------------------------
+  // Accept Mock
+  // ----------------------------------------------------
   const handleAccept = async () => {
     if (!inviteData) return;
     setIsAccepting(true);
 
-    try {
-      const res = await fetch("/api/convite/aceitar", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ convite }),
-      });
+    await new Promise((res) => setTimeout(res, 600)); // delay fake
 
-      if (!res.ok) {
-        const err: ErrorResponse = await res.json().catch(() => ({}));
-        if (err.error_code === "unauthorized") {
-          setShowAuthModal(true);
-          return;
-        }
-        toast.error(err.name, { description: err.message });
-        setStatus("error");
-        return;
-      }
+    toast.success("Convite aceito!");
+    router.push("/a");
 
-      router.push("/a");
-    } catch {
-      setStatus("error");
-    } finally {
-      setIsAccepting(false);
-    }
+    setIsAccepting(false);
   };
 
+  // ----------------------------------------------------
+  // Decline Mock
+  // ----------------------------------------------------
   const handleDecline = async () => {
     setIsDeclining(true);
-    try {
-      await fetch("/api/convite/recusar", {
-        method: "POST",
-        body: JSON.stringify({ token }),
-      });
-      router.push("/");
-    } catch {
-      setStatus("error");
-    } finally {
-      setIsDeclining(false);
-    }
+
+    await new Promise((res) => setTimeout(res, 500));
+
+    toast.info("Convite recusado.");
+    router.push("/");
+
+    setIsDeclining(false);
   };
 
   if (status !== "valid") return <InviteStatusCard status={status} />;
@@ -116,7 +140,7 @@ export default function InvitePage() {
   return (
     <>
       <InviteInfoCard
-        inviteData={inviteData!}
+        inviteData={inviteData}
         handleAccept={handleAccept}
         handleDecline={handleDecline}
         isAccepting={isAccepting}
@@ -126,7 +150,7 @@ export default function InvitePage() {
       <InviteAuthDialog
         open={showAuthModal}
         onClose={setShowAuthModal}
-        inviteData={inviteData!}
+        inviteData={inviteData}
         setOpenLogin={setOpenLogin}
         setOpenSignup={setOpenSignup}
       />
@@ -134,17 +158,16 @@ export default function InvitePage() {
       <InviteLoginModal
         open={openLogin}
         onOpenChange={setOpenLogin}
-        convite={convite}
+        convite={MOCK_INVITE}
         setOpenSignup={setOpenSignup}
       />
 
       <InviteSignupModal
         open={openSignup}
         onOpenChange={setOpenSignup}
-        convite={convite}
-        setOpenLogin={setOpenLogin} // ✅ nome correto da prop
+        convite={MOCK_INVITE}
+        setOpenLogin={setOpenLogin}
       />
-
     </>
   );
 }

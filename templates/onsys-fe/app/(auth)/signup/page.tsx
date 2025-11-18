@@ -1,16 +1,16 @@
-import { SignupForm } from "@/_components/signup-form"
-import { ThemeToggleButton } from "@/_components/theme-toggle-button"
-import { authOptions } from "@/auth"
-import { getServerSession } from "next-auth"
-import Link from "next/link"
-import { redirect } from "next/navigation"
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
+import { SignupForm } from "@/_components/signup-form";
+import { ThemeToggleButton } from "@/_components/theme-toggle-button";
+import { authOptions } from "@/auth";
 
 export default async function SignupPage() {
-  const session = await getServerSession(authOptions)
-  
-    if (session?.user?.id) {
-      redirect("/a")
-    }
+  const session = await getServerSession(authOptions);
+
+  if (session?.user?.id) {
+    redirect("/a");
+  }
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-primary/5 p-4">
       <div className="absolute top-4 right-4">
@@ -27,6 +27,7 @@ export default async function SignupPage() {
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
               >
+                <title>icone</title>
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -37,10 +38,12 @@ export default async function SignupPage() {
             </div>
           </Link>
           <h1 className="text-3xl font-bold text-balance">Crie sua conta</h1>
-          <p className="text-muted-foreground mt-2">Faça seu cadastro para continuar</p>
+          <p className="text-muted-foreground mt-2">
+            Faça seu cadastro para continuar
+          </p>
         </div>
         <SignupForm />
       </div>
     </div>
-  )
+  );
 }

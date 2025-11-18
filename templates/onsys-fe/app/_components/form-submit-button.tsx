@@ -1,11 +1,17 @@
-"use client"
+"use client";
 
-import { useFormStatus } from "react-dom"
-import { Button } from "@/_components/ui/button"
-import { Loader2 } from "lucide-react"
+import { Loader2 } from "lucide-react";
+import { useFormStatus } from "react-dom";
+import { Button } from "@/_components/ui/button";
 
-export function FormSubmitButton({ children, form }: { children: React.ReactNode, form?: string }) {
-  const { pending } = useFormStatus()
+export function FormSubmitButton({
+  children,
+  form,
+}: {
+  children: React.ReactNode;
+  form?: string;
+}) {
+  const { pending } = useFormStatus();
 
   return (
     <Button
@@ -23,5 +29,5 @@ export function FormSubmitButton({ children, form }: { children: React.ReactNode
         children
       )}
     </Button>
-  )
+  );
 }

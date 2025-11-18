@@ -6,9 +6,9 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "**.vercel-storage.com",
-      }
-    ]
-  }
+      },
+    ],
+  },
 };
 
 export default nextConfig;

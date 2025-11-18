@@ -1,16 +1,27 @@
 // app/a/[accountId]/dados/page.tsx
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/_components/ui/card"
-import { Button } from "@/_components/ui/button"
-import { Input } from "@/_components/ui/input"
-import { Search, Plus } from "lucide-react"
-import Link from "next/link"
-import DadosTable from "@/_components/DadosTable"
 
-export default async function DadosPage({ params }: { params: Promise<{ accountId: string }> }) {
-  const { accountId } = await params
-  const id = Number(accountId)
+import { Plus, Search } from "lucide-react";
+import Link from "next/link";
+import DadosTable from "@/_components/DadosTable";
+import { Button } from "@/_components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/_components/ui/card";
+import { Input } from "@/_components/ui/input";
 
-  const stats = [{ label: "Total de Dados", value: 0 }]
+export default async function DadosPage({
+  params,
+}: {
+  params: Promise<{ accountId: string }>;
+}) {
+  const { accountId } = await params;
+  const _id = Number(accountId);
+
+  const stats = [{ label: "Total de Dados", value: 0 }];
 
   return (
     <div className="grid grid-cols-1 space-y-6">
@@ -18,7 +29,9 @@ export default async function DadosPage({ params }: { params: Promise<{ accountI
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Dados</h1>
-          <p className="text-muted-foreground text-sm sm:text-base">Gerencie os dados registrados</p>
+          <p className="text-muted-foreground text-sm sm:text-base">
+            Gerencie os dados registrados
+          </p>
         </div>
         <Button asChild className="w-full sm:w-auto">
           <Link href={`/a/${accountId}/dados/novo`}>
@@ -33,7 +46,9 @@ export default async function DadosPage({ params }: { params: Promise<{ accountI
         {stats.map((stat) => (
           <Card key={stat.label}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">{stat.label}</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                {stat.label}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stat.value}</div>
@@ -47,7 +62,9 @@ export default async function DadosPage({ params }: { params: Promise<{ accountI
         <CardHeader className="space-y-4 sm:space-y-0 sm:flex sm:items-center sm:justify-between">
           <div>
             <CardTitle>Lista de Dados</CardTitle>
-            <CardDescription>Todos os dados cadastrados no sistema</CardDescription>
+            <CardDescription>
+              Todos os dados cadastrados no sistema
+            </CardDescription>
           </div>
           <div className="relative w-full sm:w-64">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -60,5 +77,5 @@ export default async function DadosPage({ params }: { params: Promise<{ accountI
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

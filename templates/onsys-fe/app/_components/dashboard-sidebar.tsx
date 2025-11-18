@@ -1,30 +1,23 @@
-import Link from "next/link"
-import {
-  LayoutDashboard,
-  MapPin,
-  Users,
-  History
-} from "lucide-react"
-
+import { History, LayoutDashboard, MapPin, Users } from "lucide-react";
+import { headers } from "next/headers";
+import Image from "next/image";
+import Link from "next/link";
+import { Button } from "@/_components/ui/button";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarHeader,
-  SidebarFooter,
-} from "@/_components/ui/sidebar"
-
-import { Button } from "@/_components/ui/button"
-import { siteName } from "@/_lib/const"
-import FeitoPor from "./feito-por"
-import { headers } from "next/headers"
-import OnsysIcon from "./icons/onsys"
-import Image from "next/image"
+} from "@/_components/ui/sidebar";
+import { siteName } from "@/_lib/const";
+import FeitoPor from "./feito-por";
+import OnsysIcon from "./icons/onsys";
 
 export async function DashboardSidebar({ accountId }: { accountId: number }) {
   const headerList = await headers();
@@ -39,18 +32,20 @@ export async function DashboardSidebar({ accountId }: { accountId: number }) {
     },
     {
       title: "Gestão",
-      items: [
-        { title: "Dados", href: `/a/${accountId}/dados`, icon: MapPin },
-      ],
+      items: [{ title: "Dados", href: `/a/${accountId}/dados`, icon: MapPin }],
     },
     {
       title: "Administração",
       items: [
         { title: "Usuários", href: `/a/${accountId}/usuarios`, icon: Users },
-        { title: "Histórico", href: `/a/${accountId}/historico`, icon: History },
+        {
+          title: "Histórico",
+          href: `/a/${accountId}/historico`,
+          icon: History,
+        },
       ],
     },
-  ]
+  ];
 
   return (
     <Sidebar>
@@ -61,7 +56,7 @@ export async function DashboardSidebar({ accountId }: { accountId: number }) {
           className="w-full justify-between font-semibold text-sm"
           asChild
         >
-          <Link href={`/a/${accountId}`} >
+          <Link href={`/a/${accountId}`}>
             <div className="flex items-center gap-2">
               <OnsysIcon className="min-w-6 min-h-6 dark:fill-white dark:text-white dark:stroke-white" />
               <span className="truncate max-w-[150px]">{siteName}</span>
@@ -78,7 +73,7 @@ export async function DashboardSidebar({ accountId }: { accountId: number }) {
             <SidebarGroupContent>
               <SidebarMenu>
                 {section.items.map((item) => {
-                  const isActive = pathname === item.href
+                  const isActive = pathname === item.href;
                   return (
                     <SidebarMenuItem key={item.href}>
                       <SidebarMenuButton asChild isActive={isActive}>
@@ -88,7 +83,7 @@ export async function DashboardSidebar({ accountId }: { accountId: number }) {
                         </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
-                  )
+                  );
                 })}
               </SidebarMenu>
             </SidebarGroupContent>
@@ -96,12 +91,11 @@ export async function DashboardSidebar({ accountId }: { accountId: number }) {
         ))}
         <div className="flex flex-1"></div>
         <Image width={50} height={50} alt="Logo" src="/vercel.svg" />
-
       </SidebarContent>
 
       <SidebarFooter className="border-t border-border p-4 text-xs text-muted-foreground text-center">
         <FeitoPor />
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }

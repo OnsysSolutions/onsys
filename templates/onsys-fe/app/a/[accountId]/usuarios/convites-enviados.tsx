@@ -1,5 +1,8 @@
-"use client"
+"use client";
 
+import { Loader2, Mail, MoreHorizontal, Trash } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 import { Badge } from "@/_components/ui/badge";
 import { Button } from "@/_components/ui/button";
 import {
@@ -7,11 +10,8 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "@/_components/ui/dropdown-menu";
-import { Mail, MoreHorizontal, Trash, Loader2 } from "lucide-react";
-import { toast } from "sonner";
-import { useState } from "react";
 
 // -----------------------
 // MOCK TYPES
@@ -46,12 +46,12 @@ export default function ConvitesEnviados({
   convite,
   dataEnvio,
   accountId,
-  handleDecline
+  handleDecline,
 }: {
   convite: Convite;
   dataEnvio: string;
   accountId: number;
-  handleDecline: (conviteId: number) => Promise<any>
+  handleDecline: (conviteId: number) => Promise<any>;
 }) {
   const [loading, setLoading] = useState<string | null>(null);
 
@@ -95,7 +95,8 @@ export default function ConvitesEnviados({
         <div>
           <p className="font-medium">{convite.email}</p>
           <p className="text-sm text-muted-foreground">
-            {convite.tipoUsuario.nome} • Enviado por {convite.criadoPor?.nome ?? "Sistema"} • {dataEnvio}
+            {convite.tipoUsuario.nome} • Enviado por{" "}
+            {convite.criadoPor?.nome ?? "Sistema"} • {dataEnvio}
           </p>
         </div>
       </div>

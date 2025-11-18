@@ -1,32 +1,48 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/_components/ui/card"
-import { Button } from "@/_components/ui/button"
-import { Input } from "@/_components/ui/input"
-import { Label } from "@/_components/ui/label"
-import { Textarea } from "@/_components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/_components/ui/select"
-import { ArrowLeft, Mail, UserPlus, Info } from "lucide-react"
-import { Alert, AlertDescription } from "@/_components/ui/alert"
-import Link from "next/link"
-import { revalidatePath } from "next/cache"
-import { FormSubmitButton } from "@/_components/form-submit-button"
+import { ArrowLeft, Info, Mail, UserPlus } from "lucide-react";
+import { revalidatePath } from "next/cache";
+import Link from "next/link";
+import { FormSubmitButton } from "@/_components/form-submit-button";
+import { Alert, AlertDescription } from "@/_components/ui/alert";
+import { Button } from "@/_components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/_components/ui/card";
+import { Input } from "@/_components/ui/input";
+import { Label } from "@/_components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/_components/ui/select";
+import { Textarea } from "@/_components/ui/textarea";
 
 // ✅ Nova Server Action local
 async function handleSendInvite(formData: FormData) {
-  "use server"
+  "use server";
 
-  const email = formData.get("email") as string
-  const role = formData.get("role") as string
-  const mensagem = formData.get("mensagem") as string
-  const accountId = formData.get("accountId") as string
+  const email = formData.get("email") as string;
+  const role = formData.get("role") as string;
+  const mensagem = formData.get("mensagem") as string;
+  const _accountId = formData.get("accountId") as string;
 
-  console.log("[Server Action] Enviando convite:", { email, role, mensagem })
+  console.log("[Server Action] Enviando convite:", { email, role, mensagem });
 
   // Opcional: revalida a página após enviar
-  revalidatePath("/")
+  revalidatePath("/");
 }
 
-export default async function ConvidarUsuarioPage({ params }: { params: Promise<{ accountId: string }> }) {
-  const { accountId } = await params
+export default async function ConvidarUsuarioPage({
+  params,
+}: {
+  params: Promise<{ accountId: string }>;
+}) {
+  const { accountId } = await params;
 
   return (
     <div className="space-y-6">
@@ -37,16 +53,20 @@ export default async function ConvidarUsuarioPage({ params }: { params: Promise<
           </Link>
         </Button>
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Convidar Usuário</h1>
-          <p className="text-muted-foreground">Envie um convite para um novo usuário participar da conta</p>
+          <h1 className="text-3xl font-bold tracking-tight">
+            Convidar Usuário
+          </h1>
+          <p className="text-muted-foreground">
+            Envie um convite para um novo usuário participar da conta
+          </p>
         </div>
       </div>
 
       <Alert>
         <Info className="h-4 w-4" />
         <AlertDescription>
-          O usuário receberá um email com um link para aceitar o convite e criar sua conta na plataforma. O convite
-          expira em 7 dias.
+          O usuário receberá um email com um link para aceitar o convite e criar
+          sua conta na plataforma. O convite expira em 7 dias.
         </AlertDescription>
       </Alert>
 
@@ -55,7 +75,9 @@ export default async function ConvidarUsuarioPage({ params }: { params: Promise<
           <Card>
             <CardHeader>
               <CardTitle>Informações do Convite</CardTitle>
-              <CardDescription>Preencha os dados para enviar o convite</CardDescription>
+              <CardDescription>
+                Preencha os dados para enviar o convite
+              </CardDescription>
             </CardHeader>
             <CardContent>
               {/* ✅ Formulário Server Action */}
@@ -87,36 +109,35 @@ export default async function ConvidarUsuarioPage({ params }: { params: Promise<
                       <SelectValue placeholder="Selecione o tipo de usuário" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="1">
-                           Admin
-                          </SelectItem>
-                          <SelectItem value="2">
-                           Editor
-                          </SelectItem>
-                          <SelectItem value="2">
-                        Convidado
-                          </SelectItem>
+                      <SelectItem value="1">Admin</SelectItem>
+                      <SelectItem value="2">Editor</SelectItem>
+                      <SelectItem value="2">Convidado</SelectItem>
                     </SelectContent>
                   </Select>
                   <div className="space-y-2 rounded-lg border bg-muted/50 p-3 text-sm">
                     <p className="font-medium">Permissões por tipo:</p>
                     <ul className="space-y-1 text-muted-foreground">
                       <li>
-                        <strong>Administrador:</strong> Acesso completo ao sistema, incluindo configurações e
-                        gerenciamento de usuários
+                        <strong>Administrador:</strong> Acesso completo ao
+                        sistema, incluindo configurações e gerenciamento de
+                        usuários
                       </li>
                       <li>
-                        <strong>Editor:</strong> Pode criar, editar e visualizar todos os registros do arquivo
+                        <strong>Editor:</strong> Pode criar, editar e visualizar
+                        todos os registros do arquivo
                       </li>
                       <li>
-                        <strong>Visitante:</strong> Pode apenas visualizar registros e realizar consultas
+                        <strong>Visitante:</strong> Pode apenas visualizar
+                        registros e realizar consultas
                       </li>
                     </ul>
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="mensagem">Mensagem Personalizada (Opcional)</Label>
+                  <Label htmlFor="mensagem">
+                    Mensagem Personalizada (Opcional)
+                  </Label>
                   <Textarea
                     id="mensagem"
                     name="mensagem"
@@ -156,7 +177,8 @@ export default async function ConvidarUsuarioPage({ params }: { params: Promise<
                   <div>
                     <p className="font-medium">Envio do Convite</p>
                     <p className="text-muted-foreground">
-                      Um email será enviado para o endereço informado com um link único
+                      Um email será enviado para o endereço informado com um
+                      link único
                     </p>
                   </div>
                 </div>
@@ -184,7 +206,8 @@ export default async function ConvidarUsuarioPage({ params }: { params: Promise<
                   <div>
                     <p className="font-medium">Acesso Liberado</p>
                     <p className="text-muted-foreground">
-                      Após criar a conta, o usuário terá acesso imediato ao sistema
+                      Após criar a conta, o usuário terá acesso imediato ao
+                      sistema
                     </p>
                   </div>
                 </div>
@@ -199,12 +222,18 @@ export default async function ConvidarUsuarioPage({ params }: { params: Promise<
             <CardContent className="space-y-3 text-sm text-muted-foreground">
               <p>• Convites expiram após 7 dias</p>
               <p>• Você pode reenviar convites pendentes</p>
-              <p>• O usuário pode usar qualquer provedor de autenticação (Google, email/senha)</p>
-              <p>• Você pode alterar as permissões do usuário após ele aceitar o convite</p>
+              <p>
+                • O usuário pode usar qualquer provedor de autenticação (Google,
+                email/senha)
+              </p>
+              <p>
+                • Você pode alterar as permissões do usuário após ele aceitar o
+                convite
+              </p>
             </CardContent>
           </Card>
         </div>
       </div>
     </div>
-  )
+  );
 }

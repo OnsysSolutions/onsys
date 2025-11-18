@@ -1,16 +1,14 @@
-import { prisma } from "@/_lib/prisma"
-import Link from "next/link"
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/_components/ui/card"
-import { Button } from "@/_components/ui/button"
-import { Badge } from "@/_components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/_components/ui/avatar"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/_components/ui/tabs"
+  Activity,
+  ArrowLeft,
+  Calendar,
+  Clock,
+  FileText,
+  Mail,
+  Trash,
+} from "lucide-react";
+import Link from "next/link";
+import { getServerSession } from "next-auth";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,17 +19,43 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/_components/ui/alert-dialog"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/_components/ui/table"
-import { ArrowLeft, Mail, Calendar, Activity, Trash, Clock, FileText } from "lucide-react"
-import { RoleSelect } from "./RoleSelect"
-import { get } from "@/actions/image_upload"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/auth"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/_components/ui/tooltip"
+} from "@/_components/ui/alert-dialog";
+import { Avatar, AvatarFallback, AvatarImage } from "@/_components/ui/avatar";
+import { Badge } from "@/_components/ui/badge";
+import { Button } from "@/_components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/_components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/_components/ui/table";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/_components/ui/tabs";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/_components/ui/tooltip";
+import { prisma } from "@/_lib/prisma";
+import { get } from "@/actions/image_upload";
+import { authOptions } from "@/auth";
+import { RoleSelect } from "./RoleSelect";
 
 interface Props {
-  params: Promise<{ id: string; accountId: string }>
+  params: Promise<{ id: string; accountId: string }>;
 }
 
 export default async function UsuarioDetalhePage({ params }: Props) {
@@ -47,18 +71,18 @@ export default async function UsuarioDetalhePage({ params }: Props) {
       tipoUsuario: true,
       convitesCriados: true,
     },
-  })
+  });
 
-  if (!usuario) return <div>Usuário não encontrado</div>
+  if (!usuario) return <div>Usuário não encontrado</div>;
 
-  const avatarRes = await get(usuario?.image || "")
-  const userAvatar = "url" in avatarRes ? avatarRes.url : "/placeholder.svg"
+  const avatarRes = await get(usuario?.image || "");
+  const userAvatar = "url" in avatarRes ? avatarRes.url : "/placeholder.svg";
 
   const atividadesRecentes = await prisma.historico.findMany({
     where: { usuarioId: usuario?.id },
     orderBy: { criadoEm: "desc" },
     take: 5,
-  })
+  });
 
   const dadosCriadosCount = await prisma.historico.count({
     where: {
@@ -69,11 +93,11 @@ export default async function UsuarioDetalhePage({ params }: Props) {
         dadoId: null,
       },
     },
-  })
+  });
 
   const estatisticas = [
     { label: "Dados criados", value: dadosCriadosCount, icon: FileText },
-  ]
+  ];
 
   const getInitials = (nome: string) => {
     return nome
@@ -81,22 +105,22 @@ export default async function UsuarioDetalhePage({ params }: Props) {
       .map((n) => n[0])
       .join("")
       .toUpperCase()
-      .slice(0, 2)
-  }
+      .slice(0, 2);
+  };
 
   const getTipoIcon = (tipo: string) => {
     switch (tipo) {
       case "CRIADO":
-        return "bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-400"
+        return "bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-400";
       case "EDITADO":
-        return "bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-400"
+        return "bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-400";
       case "MOVIMENTADO":
-        return "bg-purple-100 text-purple-600 dark:bg-purple-900 dark:text-purple-400"
+        return "bg-purple-100 text-purple-600 dark:bg-purple-900 dark:text-purple-400";
       default:
-        return "bg-gray-100 text-gray-600 dark:bg-gray-900 dark:text-gray-400"
+        return "bg-gray-100 text-gray-600 dark:bg-gray-900 dark:text-gray-400";
     }
-  }
-  const tiposUsuariosAccounts = await prisma.tipoUsuarioAccount.findMany()
+  };
+  const tiposUsuariosAccounts = await prisma.tipoUsuarioAccount.findMany();
 
   return (
     <div className="space-y-6">
@@ -107,8 +131,12 @@ export default async function UsuarioDetalhePage({ params }: Props) {
           </Link>
         </Button>
         <div className="flex-1">
-          <h1 className="text-3xl font-bold tracking-tight">Detalhes do Usuário</h1>
-          <p className="text-muted-foreground">Visualize e gerencie as informações e permissões</p>
+          <h1 className="text-3xl font-bold tracking-tight">
+            Detalhes do Usuário
+          </h1>
+          <p className="text-muted-foreground">
+            Visualize e gerencie as informações e permissões
+          </p>
         </div>
         <AlertDialog>
           <AlertDialogTrigger asChild>
@@ -134,14 +162,13 @@ export default async function UsuarioDetalhePage({ params }: Props) {
                 </Button>
               </AlertDialogTrigger>
             )}
-
-
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>Remover usuário da conta?</AlertDialogTitle>
               <AlertDialogDescription>
-                Esta ação removerá o acesso de <strong>{usuario.nome}</strong> a esta conta.
+                Esta ação removerá o acesso de <strong>{usuario.nome}</strong> a
+                esta conta.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
@@ -163,12 +190,19 @@ export default async function UsuarioDetalhePage({ params }: Props) {
             <CardContent className="space-y-6">
               <div className="flex flex-col items-center gap-4">
                 <Avatar className="h-24 w-24">
-                  <AvatarImage src={userAvatar || "/placeholder.svg"} alt={usuario.nome} />
-                  <AvatarFallback className="text-2xl">{getInitials(usuario.nome)}</AvatarFallback>
+                  <AvatarImage
+                    src={userAvatar || "/placeholder.svg"}
+                    alt={usuario.nome}
+                  />
+                  <AvatarFallback className="text-2xl">
+                    {getInitials(usuario.nome)}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="text-center">
                   <h3 className="text-xl font-semibold">{usuario.nome}</h3>
-                  <p className="text-sm text-muted-foreground">{usuario.email}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {usuario.email}
+                  </p>
                 </div>
                 <Badge variant="default" className="text-sm">
                   {usuario.status.nome}
@@ -188,7 +222,9 @@ export default async function UsuarioDetalhePage({ params }: Props) {
                   <Calendar className="h-4 w-4 text-muted-foreground" />
                   <div className="flex-1">
                     <p className="text-muted-foreground">Membro desde</p>
-                    <p className="font-medium">{usuario.criadoEm.toLocaleDateString()}</p>
+                    <p className="font-medium">
+                      {usuario.criadoEm.toLocaleDateString()}
+                    </p>
                   </div>
                 </div>
 
@@ -204,10 +240,12 @@ export default async function UsuarioDetalhePage({ params }: Props) {
           </Card>
 
           <div className="space-y-4">
-            <RoleSelect userId={usuario.id} tiposUsuariosAccounts={tiposUsuariosAccounts} initialRole={usuario.accounts[0]?.tipoUsuarioAccount.nome} />
+            <RoleSelect
+              userId={usuario.id}
+              tiposUsuariosAccounts={tiposUsuariosAccounts}
+              initialRole={usuario.accounts[0]?.tipoUsuarioAccount.nome}
+            />
           </div>
-
-
         </div>
 
         <div className=" lg:col-span-2">
@@ -221,7 +259,9 @@ export default async function UsuarioDetalhePage({ params }: Props) {
               <Card>
                 <CardHeader>
                   <CardTitle>Atividade Recente</CardTitle>
-                  <CardDescription>Últimas ações realizadas pelo usuário</CardDescription>
+                  <CardDescription>
+                    Últimas ações realizadas pelo usuário
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="w-full overflow-x-auto">
@@ -240,16 +280,20 @@ export default async function UsuarioDetalhePage({ params }: Props) {
                               <div className="flex items-center gap-3">
                                 <div
                                   className={`flex h-8 w-8 items-center justify-center rounded-full ${getTipoIcon(
-                                    atividade.acao
+                                    atividade.acao,
                                   )}`}
                                 >
                                   <Activity className="h-4 w-4" />
                                 </div>
-                                <span className="font-medium">{atividade.descricao || atividade.acao}</span>
+                                <span className="font-medium">
+                                  {atividade.descricao || atividade.acao}
+                                </span>
                               </div>
                             </TableCell>
                             <TableCell>
-                              <code className="rounded bg-muted px-2 py-1 text-sm">--</code>
+                              <code className="rounded bg-muted px-2 py-1 text-sm">
+                                --
+                              </code>
                             </TableCell>
                             <TableCell className="text-muted-foreground">
                               {atividade.criadoEm.toLocaleString()}
@@ -260,7 +304,6 @@ export default async function UsuarioDetalhePage({ params }: Props) {
                     </Table>
                   </div>
                 </CardContent>
-
               </Card>
             </TabsContent>
 
@@ -269,7 +312,9 @@ export default async function UsuarioDetalhePage({ params }: Props) {
                 {estatisticas.map((stat) => (
                   <Card key={stat.label}>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-sm font-medium">{stat.label}</CardTitle>
+                      <CardTitle className="text-sm font-medium">
+                        {stat.label}
+                      </CardTitle>
                       <stat.icon className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
@@ -283,5 +328,5 @@ export default async function UsuarioDetalhePage({ params }: Props) {
         </div>
       </div>
     </div>
-  )
+  );
 }

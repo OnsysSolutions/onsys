@@ -1,19 +1,32 @@
 "use client";
 
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/_components/ui/dialog";
-import { Button } from "@/_components/ui/button";
 import { CopyButton } from "@/_components/copy-button";
-import { InviteData } from "./page";
+import { Button } from "@/_components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/_components/ui/dialog";
+import type { InviteData } from "./page";
 
 interface Props {
   open: boolean;
   onClose: (open: boolean) => void;
-  inviteData: InviteData;
+  inviteData: InviteData | null;
   setOpenLogin: (open: boolean) => void;
   setOpenSignup: (open: boolean) => void;
 }
 
-export default function InviteAuthDialog({ open, onClose, inviteData, setOpenLogin, setOpenSignup }: Props) {
+export default function InviteAuthDialog({
+  open,
+  onClose,
+  inviteData,
+  setOpenLogin,
+  setOpenSignup,
+}: Props) {
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-md">

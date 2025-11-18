@@ -1,46 +1,62 @@
-"use client"
+"use client";
 
-import { useState, useEffect, useTransition } from "react"
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/_components/ui/select"
-import { Button } from "@/_components/ui/button"
-import { Save, Shield, Loader2 } from "lucide-react"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/_components/ui/card"
-import { Label } from "@/_components/ui/label"
-import { Skeleton } from "@/_components/ui/skeleton"
-import { useParams } from "next/navigation"
-import { toast } from "sonner"
+import { Loader2, Save, Shield } from "lucide-react";
+import { useParams } from "next/navigation";
+import { useEffect, useState, useTransition } from "react";
+import { toast } from "sonner";
+import { Button } from "@/_components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/_components/ui/card";
+import { Label } from "@/_components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/_components/ui/select";
+import { Skeleton } from "@/_components/ui/skeleton";
 
 interface TipoUsuarioAccount {
-  id: number
-  nome: string
+  id: number;
+  nome: string;
 }
 
 interface RoleSelectProps {
-  initialRole?: string
-  tiposUsuariosAccounts: TipoUsuarioAccount[]
-  userId?: number
+  initialRole?: string;
+  tiposUsuariosAccounts: TipoUsuarioAccount[];
+  userId?: number;
 }
 
-export function RoleSelect({ initialRole, tiposUsuariosAccounts, userId }: RoleSelectProps) {
-  const [role, setRole] = useState<string | null>(null)
-  const [hasChanges, setHasChanges] = useState(false)
-  const [loading, setLoading] = useState(true)
-  const [isPending, startTransition] = useTransition()
-  const { accountId } = useParams()
+export function RoleSelect({
+  initialRole,
+  tiposUsuariosAccounts,
+  userId,
+}: RoleSelectProps) {
+  const [role, setRole] = useState<string | null>(null);
+  const [hasChanges, setHasChanges] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [isPending, startTransition] = useTransition();
+  const { accountId } = useParams();
 
   useEffect(() => {
-    if (initialRole) setRole(initialRole)
-    const timeout = setTimeout(() => setLoading(false), 600)
-    return () => clearTimeout(timeout)
-  }, [initialRole])
+    if (initialRole) setRole(initialRole);
+    const timeout = setTimeout(() => setLoading(false), 600);
+    return () => clearTimeout(timeout);
+  }, [initialRole]);
 
   const handleRoleChange = (value: string) => {
-    setRole(value)
-    setHasChanges(true)
-  }
+    setRole(value);
+    setHasChanges(true);
+  };
 
   const handleSave = async () => {
-    if (!userId || !role) return
+    if (!userId || !role) return;
 
     startTransition(async () => {
       try {
@@ -48,23 +64,23 @@ export function RoleSelect({ initialRole, tiposUsuariosAccounts, userId }: RoleS
           method: "POST",
           body: JSON.stringify({ role, accountId }),
           headers: { "Content-Type": "application/json" },
-        })
+        });
 
         if (!res.ok) {
-          const msg = await res.json()
-          console.error("Erro ao atualizar role:", msg.error)
-          toast.error(`Erro ao atualizar: ${msg.error}`)
-          return
+          const msg = await res.json();
+          console.error("Erro ao atualizar role:", msg.error);
+          toast.error(`Erro ao atualizar: ${msg.error}`);
+          return;
         }
 
-        toast.success("Alterações salvas")
-        setHasChanges(false)
+        toast.success("Alterações salvas");
+        setHasChanges(false);
       } catch (err) {
-        console.error("Erro inesperado:", err)
-        toast.error("Erro inesperado")
+        console.error("Erro inesperado:", err);
+        toast.error("Erro inesperado");
       }
-    })
-  }
+    });
+  };
 
   // 🦴 Skeleton
   if (loading || !role) {
@@ -86,7 +102,7 @@ export function RoleSelect({ initialRole, tiposUsuariosAccounts, userId }: RoleS
           <Skeleton className="h-10 w-full rounded-md" />
         </CardContent>
       </Card>
-    )
+    );
   }
 
   // 💎 Versão normal
@@ -166,5 +182,5 @@ export function RoleSelect({ initialRole, tiposUsuariosAccounts, userId }: RoleS
         )}
       </CardContent>
     </Card>
-  )
+  );
 }

@@ -1,17 +1,17 @@
-"use client"
+"use client";
 
-import { Button } from "@/_components/ui/button"
+import { Button } from "@/_components/ui/button";
 
 export default function UsuariosPagination({
   totalPages,
   currentPage,
   onPageChange,
 }: {
-  totalPages: number
-  currentPage: number
-  onPageChange: (page: number) => void
+  totalPages: number;
+  currentPage: number;
+  onPageChange: (page: number) => void;
 }) {
-  if (totalPages <= 1) return null
+  if (totalPages <= 1) return null;
 
   return (
     <div className="flex justify-center items-center gap-2 p-4 border-t">
@@ -35,5 +35,5 @@ export default function UsuariosPagination({
         Próxima
       </Button>
     </div>
-  )
+  );
 }

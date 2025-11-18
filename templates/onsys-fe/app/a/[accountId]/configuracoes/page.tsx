@@ -1,29 +1,50 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/_components/ui/card"
-import { Button } from "@/_components/ui/button"
-import { Input } from "@/_components/ui/input"
-import { Label } from "@/_components/ui/label"
-import { Separator } from "@/_components/ui/separator"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/_components/ui/tabs"
-import { Settings, Building2, Code, Plug } from "lucide-react"
-import { userAccountRole } from "@/actions/user"
-import EmptyData from "@/_components/empty-data-1"
+import { Building2, Plug, Settings } from "lucide-react";
+import EmptyData from "@/_components/empty-data-1";
+import { Button } from "@/_components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/_components/ui/card";
+import { Input } from "@/_components/ui/input";
+import { Label } from "@/_components/ui/label";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/_components/ui/tabs";
+import { userAccountRole } from "@/actions/user";
 
 export default async function ConfiguracoesPage({
   params,
-}: { params: Promise<{ accountId: string }> }) {
+}: {
+  params: Promise<{ accountId: string }>;
+}) {
   const { accountId } = await params;
 
   const userRole = await userAccountRole(accountId);
 
   if (!userRole || userRole.id !== 1) {
-    return <EmptyData message="Acesso negado" description="Você não possui permissão para acessar este conteúdo, entre em contato com sua administração caso acredite que seja um engano." />;
+    return (
+      <EmptyData
+        message="Acesso negado"
+        description="Você não possui permissão para acessar este conteúdo, entre em contato com sua administração caso acredite que seja um engano."
+      />
+    );
   }
-  
+
   return (
     <div>
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Configurações da Plataforma</h1>
-        <p className="text-muted-foreground">Gerencie as configurações gerais da sua organização</p>
+        <h1 className="text-3xl font-bold tracking-tight">
+          Configurações da Plataforma
+        </h1>
+        <p className="text-muted-foreground">
+          Gerencie as configurações gerais da sua organização
+        </p>
       </div>
 
       <Tabs defaultValue="general" className="space-y-6">
@@ -46,12 +67,17 @@ export default async function ConfiguracoesPage({
           <Card>
             <CardHeader>
               <CardTitle>Informações Gerais</CardTitle>
-              <CardDescription>Configure as informações básicas da plataforma</CardDescription>
+              <CardDescription>
+                Configure as informações básicas da plataforma
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="platform-name">Nome da Plataforma</Label>
-                <Input id="platform-name" defaultValue="Sistema de Arquivo Morto" />
+                <Input
+                  id="platform-name"
+                  defaultValue="Sistema de Arquivo Morto"
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="timezone">Fuso Horário</Label>
@@ -73,7 +99,9 @@ export default async function ConfiguracoesPage({
           <Card>
             <CardHeader>
               <CardTitle>Dados da Organização</CardTitle>
-              <CardDescription>Informações sobre sua empresa ou instituição</CardDescription>
+              <CardDescription>
+                Informações sobre sua empresa ou instituição
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2">
@@ -92,7 +120,10 @@ export default async function ConfiguracoesPage({
               </div>
               <div className="space-y-2">
                 <Label htmlFor="org-address">Endereço</Label>
-                <Input id="org-address" defaultValue="Rua Exemplo, 123 - Centro" />
+                <Input
+                  id="org-address"
+                  defaultValue="Rua Exemplo, 123 - Centro"
+                />
               </div>
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
@@ -116,7 +147,9 @@ export default async function ConfiguracoesPage({
           <Card>
             <CardHeader>
               <CardTitle>Integrações</CardTitle>
-              <CardDescription>Configure integrações com serviços externos</CardDescription>
+              <CardDescription>
+                Configure integrações com serviços externos
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -137,5 +170,5 @@ export default async function ConfiguracoesPage({
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }

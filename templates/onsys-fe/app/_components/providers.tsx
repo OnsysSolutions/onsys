@@ -1,9 +1,9 @@
-'use client'
+"use client";
 
-import { ThemeProvider } from 'next-themes'
-import { Toaster } from './ui/sonner'
-import { TooltipProvider } from './ui/tooltip'
-import { PropsWithChildren } from 'react'
+import { ThemeProvider } from "next-themes";
+import type { PropsWithChildren } from "react";
+import { Toaster } from "./ui/sonner";
+import { TooltipProvider } from "./ui/tooltip";
 
 export default function Providers({ children }: PropsWithChildren) {
   return (
@@ -13,8 +13,8 @@ export default function Providers({ children }: PropsWithChildren) {
       enableSystem
       storageKey="ui-theme"
       value={{
-        light: 'light',
-        dark: 'dark',
+        light: "light",
+        dark: "dark",
       }}
     >
       <TooltipProvider>
@@ -22,5 +22,5 @@ export default function Providers({ children }: PropsWithChildren) {
         <Toaster position="bottom-right" richColors />
       </TooltipProvider>
     </ThemeProvider>
-  )
+  );
 }

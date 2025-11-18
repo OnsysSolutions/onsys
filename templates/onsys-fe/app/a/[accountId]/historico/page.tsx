@@ -1,11 +1,36 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/_components/ui/card"
-import { Button } from "@/_components/ui/button"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/_components/ui/table"
-import { Badge } from "@/_components/ui/badge"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/_components/ui/dropdown-menu"
-import { Download, MoreVertical, Clock, User, FileText } from "lucide-react"
-import Link from "next/link"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/_components/ui/dialog"
+import { Clock, Download, FileText, MoreVertical, User } from "lucide-react";
+import Link from "next/link";
+import { Badge } from "@/_components/ui/badge";
+import { Button } from "@/_components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/_components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/_components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/_components/ui/dropdown-menu";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/_components/ui/table";
 
 const actionColors = {
   CRIADO: "bg-green-500/10 text-green-500 border-green-500/20",
@@ -13,7 +38,7 @@ const actionColors = {
   ARQUIVADO: "bg-red-500/10 text-red-500 border-red-500/20",
   DESCARTADO: "bg-purple-500/10 text-purple-500 border-purple-500/20",
   MOVIMENTADO: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
-}
+};
 
 // ----------------------
 // 📌 MOCK DATA
@@ -54,20 +79,22 @@ const historicos = [
 
     usuarioAccount: { usuario: { nome: "João Pedro" } },
     convite: null,
-  }
-]
+  },
+];
 
-const totalAcoes = historicos.length
-const usuariosAtivos = new Set(historicos.map(h => h.usuarioAccount?.usuario?.nome)).size
-const hoje = new Date()
-const acoesHoje = historicos.filter(h => {
-  const d = new Date(h.criadoEm)
+const totalAcoes = historicos.length;
+const usuariosAtivos = new Set(
+  historicos.map((h) => h.usuarioAccount?.usuario?.nome),
+).size;
+const hoje = new Date();
+const acoesHoje = historicos.filter((h) => {
+  const d = new Date(h.criadoEm);
   return (
     d.getDate() === hoje.getDate() &&
     d.getMonth() === hoje.getMonth() &&
     d.getFullYear() === hoje.getFullYear()
-  )
-}).length
+  );
+}).length;
 
 // ----------------------
 // PAGE COMPONENT
@@ -75,20 +102,27 @@ const acoesHoje = historicos.filter(h => {
 
 export default async function HistoricoPage({
   params,
-}: { params: Promise<{ accountId: string }> }) {
-
+}: {
+  params: Promise<{ accountId: string }>;
+}) {
   return (
     <div className="grid grid-cols-1 space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Histórico de Ações</h1>
-        <p className="text-muted-foreground">Visualize todas as ações realizadas no sistema</p>
+        <h1 className="text-3xl font-bold tracking-tight">
+          Histórico de Ações
+        </h1>
+        <p className="text-muted-foreground">
+          Visualize todas as ações realizadas no sistema
+        </p>
       </div>
 
       {/* Stats */}
       <div className="grid gap-4 md:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Total de Ações</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Total de Ações
+            </CardTitle>
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -99,7 +133,9 @@ export default async function HistoricoPage({
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Usuários Ativos</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Usuários Ativos
+            </CardTitle>
             <User className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -115,7 +151,9 @@ export default async function HistoricoPage({
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{acoesHoje}</div>
-            <p className="text-xs text-muted-foreground">+0% em relação a ontem</p>
+            <p className="text-xs text-muted-foreground">
+              +0% em relação a ontem
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -125,7 +163,9 @@ export default async function HistoricoPage({
         <CardHeader className="flex items-center justify-between">
           <div>
             <CardTitle>Registro de Atividades</CardTitle>
-            <CardDescription>Visualize o histórico completo de ações</CardDescription>
+            <CardDescription>
+              Visualize o histórico completo de ações
+            </CardDescription>
           </div>
 
           <Dialog>
@@ -138,7 +178,9 @@ export default async function HistoricoPage({
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>Exportar Histórico</DialogTitle>
-                <DialogDescription>Escolha o formato de arquivo desejado.</DialogDescription>
+                <DialogDescription>
+                  Escolha o formato de arquivo desejado.
+                </DialogDescription>
               </DialogHeader>
 
               <div className="flex justify-center gap-4 py-4">
@@ -151,7 +193,13 @@ export default async function HistoricoPage({
 
                 <Button variant="outline" asChild>
                   <Link href="/api/historico/export?formato=csv">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" strokeWidth={2} viewBox="0 0 24 24">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      fill="none"
+                      strokeWidth={2}
+                      viewBox="0 0 24 24"
+                    >
                       <path d="M4 4h16v16H4z" />
                       <path d="M8 8h8M8 12h8M8 16h5" />
                     </svg>
@@ -161,7 +209,13 @@ export default async function HistoricoPage({
 
                 <Button variant="outline" asChild>
                   <Link href="/api/historico/export?formato=excel">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" strokeWidth={2} viewBox="0 0 24 24">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      fill="none"
+                      strokeWidth={2}
+                      viewBox="0 0 24 24"
+                    >
                       <path d="M4 4h16v16H4z" />
                       <path d="M7 8l4 8m0-8l-4 8m9-8v8" />
                     </svg>
@@ -188,18 +242,35 @@ export default async function HistoricoPage({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {historicos.map(h => (
+                {historicos.map((h) => (
                   <TableRow key={h.id}>
-                    <TableCell>{new Date(h.criadoEm).toLocaleString()}</TableCell>
                     <TableCell>
-                      <Badge variant="outline" className={actionColors[h.acao as keyof typeof actionColors]}>
+                      {new Date(h.criadoEm).toLocaleString()}
+                    </TableCell>
+                    <TableCell>
+                      <Badge
+                        variant="outline"
+                        className={
+                          actionColors[h.acao as keyof typeof actionColors]
+                        }
+                      >
                         {h.acao}
                       </Badge>
                     </TableCell>
-                    <TableCell>{h.convite ? "Convite" : h.usuarioAccount ? "Usuário" : "Outro"}</TableCell>
+                    <TableCell>
+                      {h.convite
+                        ? "Convite"
+                        : h.usuarioAccount
+                          ? "Usuário"
+                          : "Outro"}
+                    </TableCell>
                     <TableCell className="font-mono">{h.id}</TableCell>
-                    <TableCell>{h.usuarioAccount?.usuario?.nome ?? "-"}</TableCell>
-                    <TableCell className="max-w-[300px] truncate">{h.descricao}</TableCell>
+                    <TableCell>
+                      {h.usuarioAccount?.usuario?.nome ?? "-"}
+                    </TableCell>
+                    <TableCell className="max-w-[300px] truncate">
+                      {h.descricao}
+                    </TableCell>
                     <TableCell>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -220,5 +291,5 @@ export default async function HistoricoPage({
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

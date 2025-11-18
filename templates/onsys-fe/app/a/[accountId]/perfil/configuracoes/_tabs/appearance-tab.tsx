@@ -1,9 +1,23 @@
-"use client"
+"use client";
 
-import { ColorPicker, ColorPickerAlpha, ColorPickerEyeDropper, ColorPickerFormat, ColorPickerHue, ColorPickerOutput, ColorPickerSelection } from "@/_components/color-picker"
-import { ThemeToggleButton } from "@/_components/theme-toggle-button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/_components/ui/card"
-import { Label } from "@/_components/ui/label"
+import {
+  ColorPicker,
+  ColorPickerAlpha,
+  ColorPickerEyeDropper,
+  ColorPickerFormat,
+  ColorPickerHue,
+  ColorPickerOutput,
+  ColorPickerSelection,
+} from "@/_components/color-picker";
+import { ThemeToggleButton } from "@/_components/theme-toggle-button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/_components/ui/card";
+import { Label } from "@/_components/ui/label";
 
 export default function AppearanceTab() {
   return (
@@ -39,11 +53,13 @@ export default function AppearanceTab() {
           <div className="space-y-2">
             <Label>Modo de Cor</Label>
             <p className="text-sm text-muted-foreground">
-              Use o botão no canto superior direito para alternar entre tema claro e escuro
+              Use o botão no canto superior direito para alternar entre tema
+              claro e escuro
             </p>
-          </div> <ThemeToggleButton />
+          </div>{" "}
+          <ThemeToggleButton />
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

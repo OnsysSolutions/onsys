@@ -1,18 +1,18 @@
-import { ReactNode } from "react"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/auth"
-import { redirect } from "next/navigation"
+import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
+import type { ReactNode } from "react";
+import { authOptions } from "@/auth";
 
 export default async function AccountLayout({
   children,
 }: {
-  children: ReactNode
+  children: ReactNode;
 }) {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession(authOptions);
 
   if (!session?.user?.id) {
-    redirect("/")
+    redirect("/");
   }
 
-  return <>{children}</>
+  return <>{children}</>;
 }

@@ -1,10 +1,15 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/_components/ui/card"
-import { Users } from "lucide-react"
+import { Users } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/_components/ui/card";
 
 export default function UsuariosStats({
   stats,
 }: {
-  stats: { label: string; value: number }[]
+  stats: { label: string; value: number }[];
 }) {
   return (
     <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-4">
@@ -20,5 +25,5 @@ export default function UsuariosStats({
         </Card>
       ))}
     </div>
-  )
+  );
 }

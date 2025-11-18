@@ -1,6 +1,6 @@
 import path from "node:path";
-import type { PrismaConfig } from "prisma";
 import { config as loadEnv } from "dotenv"; // 👈 importa dotenv
+import type { PrismaConfig } from "prisma";
 
 loadEnv();
 

@@ -1,6 +1,8 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/_components/ui/avatar"
-import { Badge } from "@/_components/ui/badge"
-import { Button } from "@/_components/ui/button"
+import { Eye, MoreHorizontal, Trash } from "lucide-react";
+import Link from "next/link";
+import { Avatar, AvatarFallback, AvatarImage } from "@/_components/ui/avatar";
+import { Badge } from "@/_components/ui/badge";
+import { Button } from "@/_components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,29 +10,27 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/_components/ui/dropdown-menu"
-import { Eye, MoreHorizontal, Trash } from "lucide-react"
-import Link from "next/link"
+} from "@/_components/ui/dropdown-menu";
 
 export default function UsuariosTableRow({
   userAccount,
   accountId,
 }: {
-  userAccount: any
-  accountId: number
+  userAccount: any;
+  accountId: number;
 }) {
-  const userAvatar = userAccount.avatarUrl || "/placeholder.svg"
+  const userAvatar = userAccount.avatarUrl || "/placeholder.svg";
 
   const getTipoColor = (tipo: string) => {
     switch (tipo) {
       case "admin":
-        return "default"
+        return "default";
       case "editor":
-        return "secondary"
+        return "secondary";
       default:
-        return "outline"
+        return "outline";
     }
-  }
+  };
 
   const getInitials = (nome: string) =>
     nome
@@ -38,7 +38,7 @@ export default function UsuariosTableRow({
       .map((n) => n[0])
       .join("")
       .toUpperCase()
-      .slice(0, 2)
+      .slice(0, 2);
 
   return (
     <tr className="hover:bg-muted/40 transition-colors text-sm">
@@ -89,5 +89,5 @@ export default function UsuariosTableRow({
         </DropdownMenu>
       </td>
     </tr>
-  )
+  );
 }

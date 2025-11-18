@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader } from "@/_components/ui/card"
-import { Skeleton } from "@/_components/ui/skeleton"
+import { Card, CardContent, CardHeader } from "@/_components/ui/card";
+import { Skeleton } from "@/_components/ui/skeleton";
 
 export default function EstantesLoading() {
   return (
@@ -41,7 +41,6 @@ export default function EstantesLoading() {
           </div>
         </CardContent>
       </Card>
-
     </div>
-  )
+  );
 }

@@ -1,8 +1,9 @@
 // app/a/[accountId]/dados/novo/loading.tsx
-import { Skeleton } from "@/_components/ui/skeleton"
-import { Card, CardContent, CardHeader } from "@/_components/ui/card"
-import { Button } from "@/_components/ui/button"
-import { ArrowLeft } from "lucide-react"
+
+import { ArrowLeft } from "lucide-react";
+import { Button } from "@/_components/ui/button";
+import { Card, CardContent, CardHeader } from "@/_components/ui/card";
+import { Skeleton } from "@/_components/ui/skeleton";
 
 export default function LoadingNovoLocalPage() {
   return (
@@ -60,5 +61,5 @@ export default function LoadingNovoLocalPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

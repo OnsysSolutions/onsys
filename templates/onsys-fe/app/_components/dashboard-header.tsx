@@ -1,8 +1,12 @@
 "use client";
 
 import { Search } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
+import { useEffect, useState } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/_components/ui/avatar";
 import { Button } from "@/_components/ui/button";
-import { Input } from "@/_components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,13 +15,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/_components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/_components/ui/avatar";
+import { Input } from "@/_components/ui/input";
 import { SidebarTrigger } from "@/_components/ui/sidebar";
-import { signOut } from "next-auth/react";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { UserData } from "@/a/[accountId]/perfil/configuracoes/_tabs/profile-tab";
+import type { UserData } from "@/a/[accountId]/perfil/configuracoes/_tabs/profile-tab";
 
 interface DashboardHeaderProps {
   accountId: number;
@@ -38,7 +38,8 @@ export function DashboardHeader({ accountId }: DashboardHeaderProps) {
           fetch("/api/user", { credentials: "include" }),
         ]);
 
-        if (!avatarRes.ok || !userRes.ok) throw new Error("Erro ao buscar dados");
+        if (!avatarRes.ok || !userRes.ok)
+          throw new Error("Erro ao buscar dados");
 
         const avatarData = await avatarRes.json();
         const userData = await userRes.json();
@@ -68,9 +69,7 @@ export function DashboardHeader({ accountId }: DashboardHeaderProps) {
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div
-        className="flex gap-3 px-4 py-2 flex-row items-center justify-between sm:h-16 sm:px-6"
-      >
+      <div className="flex gap-3 px-4 py-2 flex-row items-center justify-between sm:h-16 sm:px-6">
         {/* Seção Esquerda: menu + busca */}
         <div className="flex w-full items-center gap-3 sm:flex-1">
           <SidebarTrigger className="flex-shrink-0" />
@@ -94,13 +93,17 @@ export function DashboardHeader({ accountId }: DashboardHeaderProps) {
 
         {/* Seção Direita: tema + avatar */}
         <div className="flex items-center justify-end gap-2 sm:gap-3 flex-shrink-0">
-
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-9 w-9 rounded-full">
                 <Avatar className="h-9 w-9">
-                  <AvatarImage src={avatarUrl} alt={userData?.nome ?? "Usuário"} />
-                  <AvatarFallback>{userData?.nome?.slice(0, 2) ?? "??"}</AvatarFallback>
+                  <AvatarImage
+                    src={avatarUrl}
+                    alt={userData?.nome ?? "Usuário"}
+                  />
+                  <AvatarFallback>
+                    {userData?.nome?.slice(0, 2) ?? "??"}
+                  </AvatarFallback>
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
@@ -115,13 +118,19 @@ export function DashboardHeader({ accountId }: DashboardHeaderProps) {
                 <>
                   <DropdownMenuLabel>
                     <div className="flex flex-col gap-1">
-                      <p className="text-sm font-medium truncate">{userData?.nome}</p>
-                      <p className="text-xs text-muted-foreground truncate">{userData?.email}</p>
+                      <p className="text-sm font-medium truncate">
+                        {userData?.nome}
+                      </p>
+                      <p className="text-xs text-muted-foreground truncate">
+                        {userData?.email}
+                      </p>
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <Link href={`/a/${accountId}/perfil/configuracoes`}>Configurações</Link>
+                    <Link href={`/a/${accountId}/perfil/configuracoes`}>
+                      Configurações
+                    </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem

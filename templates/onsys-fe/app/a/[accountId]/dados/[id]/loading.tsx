@@ -1,8 +1,13 @@
-import { Skeleton } from "@/_components/ui/skeleton"
-import { Card, CardContent, CardHeader } from "@/_components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/_components/ui/tabs"
-import { Button } from "@/_components/ui/button"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft } from "lucide-react";
+import { Button } from "@/_components/ui/button";
+import { Card, CardContent, CardHeader } from "@/_components/ui/card";
+import { Skeleton } from "@/_components/ui/skeleton";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/_components/ui/tabs";
 
 export default function DadoDetalhesLoading() {
   return (
@@ -93,7 +98,10 @@ export default function DadoDetalhesLoading() {
             </CardHeader>
             <CardContent className="space-y-4">
               {[...Array(3)].map((_, i) => (
-                <div key={i} className="flex gap-4 border-l-2 border-primary/30 pl-4">
+                <div
+                  key={i}
+                  className="flex gap-4 border-l-2 border-primary/30 pl-4"
+                >
                   <div className="flex-1 space-y-2">
                     <Skeleton className="h-5 w-24" />
                     <Skeleton className="h-4 w-72" />
@@ -106,5 +114,5 @@ export default function DadoDetalhesLoading() {
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }

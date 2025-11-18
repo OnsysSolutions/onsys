@@ -1,10 +1,8 @@
 "use client";
 
-import { Plus, Table } from "lucide-react";
-import { Button } from "@/_components/ui/button";
+import { Table } from "lucide-react";
 import {
   Empty,
-  EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
@@ -13,16 +11,20 @@ import {
 
 export const title = "Empty Table";
 
-const EmptyData = ({message, description}: {message: string, description: string}) => (
+const EmptyData = ({
+  message,
+  description,
+}: {
+  message: string;
+  description: string;
+}) => (
   <Empty>
     <EmptyHeader>
       <EmptyMedia variant="icon">
         <Table />
       </EmptyMedia>
       <EmptyTitle>{message}</EmptyTitle>
-      <EmptyDescription>
-        {description}
-      </EmptyDescription>
+      <EmptyDescription>{description}</EmptyDescription>
     </EmptyHeader>
   </Empty>
 );

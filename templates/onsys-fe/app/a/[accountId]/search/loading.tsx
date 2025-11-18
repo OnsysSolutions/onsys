@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { Card, CardContent } from "@/_components/ui/card";
-import { Skeleton } from "@/_components/ui/skeleton";
-import { Select, SelectTrigger, SelectValue } from "@/_components/ui/select";
 import { Button } from "@/_components/ui/button";
+import { Card, CardContent } from "@/_components/ui/card";
+import { Select, SelectTrigger, SelectValue } from "@/_components/ui/select";
+import { Skeleton } from "@/_components/ui/skeleton";
 
 export default function LoadingPage() {
   const placeholders = Array.from({ length: 6 }); // Quantos cards mostrar

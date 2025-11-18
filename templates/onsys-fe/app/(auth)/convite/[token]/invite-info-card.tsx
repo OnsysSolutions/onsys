@@ -1,7 +1,13 @@
-"use client"
+"use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/_components/ui/card"
-import { Button } from "@/_components/ui/button"
+import { Button } from "@/_components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/_components/ui/card";
+import type { MockConvite } from "./invite-login-modal";
 
 export default function InviteInfoCard({
   inviteData,
@@ -10,11 +16,11 @@ export default function InviteInfoCard({
   isAccepting,
   isDeclining,
 }: {
-  inviteData: any
-  handleAccept: () => void
-  handleDecline: () => void
-  isAccepting?: boolean
-  isDeclining?: boolean
+  inviteData: MockConvite;
+  handleAccept: () => void;
+  handleDecline: () => void;
+  isAccepting?: boolean;
+  isDeclining?: boolean;
 }) {
   return (
     <div className="flex justify-center items-center min-h-[80vh]">
@@ -25,10 +31,18 @@ export default function InviteInfoCard({
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p><b>Email:</b> {inviteData.email}</p>
-          <p><b>Função:</b> {inviteData.role}</p>
-          <p><b>Convidado por:</b> {inviteData.invitedBy}</p>
-          <p><b>Expira em:</b> {new Date(inviteData.expiresAt).toLocaleString()}</p>
+          <p>
+            <b>Email:</b> {inviteData.email}
+          </p>
+          <p>
+            <b>Função:</b> {inviteData.role}
+          </p>
+          <p>
+            <b>Convidado por:</b> {inviteData.invitedBy}
+          </p>
+          <p>
+            <b>Expira em:</b> {new Date(inviteData.expiresAt).toLocaleString()}
+          </p>
 
           <div className="flex gap-4 pt-6 justify-center">
             <Button
@@ -50,5 +64,5 @@ export default function InviteInfoCard({
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

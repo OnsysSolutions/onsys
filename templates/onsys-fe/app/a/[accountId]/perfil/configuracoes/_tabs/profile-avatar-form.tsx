@@ -1,17 +1,19 @@
-'use client';
+"use client";
 
-import { useState, useRef, useEffect } from "react";
+import { Upload, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/_components/ui/avatar";
 import { Button } from "@/_components/ui/button";
 import { Input } from "@/_components/ui/input";
 import { Label } from "@/_components/ui/label";
-import { Avatar, AvatarFallback, AvatarImage } from "@/_components/ui/avatar";
-import { Upload, X } from "lucide-react";
 
 interface ProfileAvatarFormProps {
   initialAvatarUrl?: string;
 }
 
-export default function ProfileAvatarForm({ initialAvatarUrl }: ProfileAvatarFormProps) {
+export default function ProfileAvatarForm({
+  initialAvatarUrl,
+}: ProfileAvatarFormProps) {
   const inputFileRef = useRef<HTMLInputElement>(null);
   const [avatarUrl, setAvatarUrl] = useState<string>(initialAvatarUrl ?? "");
   const [previewUrl, setPreviewUrl] = useState<string | null>(null); // Para preview
@@ -103,11 +105,17 @@ export default function ProfileAvatarForm({ initialAvatarUrl }: ProfileAvatarFor
             type="button"
             variant="outline"
             className="gap-2 bg-transparent"
-            onClick={previewUrl ? handleCancel : () => inputFileRef.current?.click()}
+            onClick={
+              previewUrl ? handleCancel : () => inputFileRef.current?.click()
+            }
             disabled={uploading}
           >
-            {previewUrl ? <X/> : <Upload className="h-4 w-4" />}
-            {previewUrl ? "Cancelar Alteração" : uploading ? "Enviando..." : "Alterar Foto"}
+            {previewUrl ? <X /> : <Upload className="h-4 w-4" />}
+            {previewUrl
+              ? "Cancelar Alteração"
+              : uploading
+                ? "Enviando..."
+                : "Alterar Foto"}
           </Button>
         </Label>
 
@@ -115,7 +123,9 @@ export default function ProfileAvatarForm({ initialAvatarUrl }: ProfileAvatarFor
           {uploading ? "Salvando..." : "Salvar Imagem"}
         </Button>
 
-        <p className="text-sm text-muted-foreground">JPG, PNG ou WEBP. Máx. 2MB.</p>
+        <p className="text-sm text-muted-foreground">
+          JPG, PNG ou WEBP. Máx. 2MB.
+        </p>
       </div>
     </form>
   );

@@ -1,15 +1,21 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import useSWRMutation from "swr/mutation"
-import { Button } from "@/_components/ui/button"
-import { Input } from "@/_components/ui/input"
-import { Label } from "@/_components/ui/label"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/_components/ui/card"
-import { Building2, UserPlus, ArrowRight } from "lucide-react"
-import { toast } from "sonner"
-import { signOut } from "next-auth/react"
+import { ArrowRight, Building2, UserPlus } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
+import { useState } from "react";
+import { toast } from "sonner";
+import useSWRMutation from "swr/mutation";
+import { Button } from "@/_components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/_components/ui/card";
+import { Input } from "@/_components/ui/input";
+import { Label } from "@/_components/ui/label";
 
 // Função para criar conta
 async function createAccount(url: string, { arg }: { arg: { nome: string } }) {
@@ -17,10 +23,10 @@ async function createAccount(url: string, { arg }: { arg: { nome: string } }) {
     method: "POST",
     body: JSON.stringify(arg),
     headers: { "Content-Type": "application/json" },
-  })
-  const data = await res.json()
-  if (!res.ok) throw new Error(data.error || "Erro ao criar conta")
-  return data
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || "Erro ao criar conta");
+  return data;
 }
 
 // Função para aceitar convite
@@ -29,46 +35,60 @@ async function joinAccount(url: string, { arg }: { arg: { token: string } }) {
     method: "POST",
     body: JSON.stringify(arg),
     headers: { "Content-Type": "application/json" },
-  })
-  const data = await res.json()
-  if (!res.ok) throw new Error(data.error || "Erro ao aceitar convite")
-  return data
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || "Erro ao aceitar convite");
+  return data;
 }
 
 export default function CreateOrJoinAccount() {
+  const router = useRouter();
+  const [formData, setFormData] = useState({ nome: "", token: "" });
 
-  const router = useRouter()
-  const [formData, setFormData] = useState({ nome: "", token: "" })
+  const { trigger: triggerCreate, isMutating: isCreating } = useSWRMutation(
+    "/api/account",
+    createAccount,
+  );
+  const { trigger: triggerJoin, isMutating: isJoining } = useSWRMutation(
+    "/api/account/join",
+    joinAccount,
+  );
 
-  const { trigger: triggerCreate, isMutating: isCreating } = useSWRMutation("/api/account", createAccount)
-  const { trigger: triggerJoin, isMutating: isJoining } = useSWRMutation("/api/account/join", joinAccount)
+  const handleCreate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.nome.trim())
+      return toast.error("O nome da conta é obrigatório");
 
- const handleCreate = async (e: React.FormEvent) => {
-  e.preventDefault()
-  if (!formData.nome.trim()) return toast.error("O nome da conta é obrigatório")
+    try {
+      const data = await triggerCreate({ nome: formData.nome });
+      toast.success(`Conta "${formData.nome}" criada com sucesso!`);
+      router.push(`/a/${data.accountId}`);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error("Erro ao criar conta");
+      }
+    }
+  };
 
-  try {
-    const data = await triggerCreate({ nome: formData.nome })
-    toast.success(`Conta "${formData.nome}" criada com sucesso!`)
-    router.push(`/a/${data.accountId}`)
-  } catch (err: any) {
-    toast.error(err.message)
-  }
-}
+  const handleJoin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.token.trim())
+      return toast.error("O token de convite é obrigatório");
 
-const handleJoin = async (e: React.FormEvent) => {
-  e.preventDefault()
-  if (!formData.token.trim()) return toast.error("O token de convite é obrigatório")
-
-  try {
-    const data = await triggerJoin({ token: formData.token })
-    toast.success("Convite aceito com sucesso!")
-    router.push(`/a/${data.accountId}`)
-  } catch (err: any) {
-    toast.error(err.message)
-  }
-}
-
+    try {
+      const data = await triggerJoin({ token: formData.token });
+      toast.success("Convite aceito com sucesso!");
+      router.push(`/a/${data.accountId}`);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error("Erro ao enviar convite");
+      }
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-50 p-4">
@@ -78,15 +98,21 @@ const handleJoin = async (e: React.FormEvent) => {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 mb-4">
             <Building2 className="w-8 h-8 text-blue-600" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Bem-vindo ao Arquivo Digital</h1>
-          <p className="text-gray-600">Crie uma nova conta ou entre com um token de convite para começar</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Bem-vindo ao Arquivo Digital
+          </h1>
+          <p className="text-gray-600">
+            Crie uma nova conta ou entre com um token de convite para começar
+          </p>
         </div>
 
         {/* Criar nova conta */}
         <Card>
           <CardHeader>
             <CardTitle>Criar nova conta</CardTitle>
-            <CardDescription>Inicie uma nova organização no sistema</CardDescription>
+            <CardDescription>
+              Inicie uma nova organização no sistema
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleCreate} className="space-y-4">
@@ -96,7 +122,9 @@ const handleJoin = async (e: React.FormEvent) => {
                   id="nome"
                   placeholder="Ex: Minha Empresa Ltda"
                   value={formData.nome}
-                  onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, nome: e.target.value })
+                  }
                   required
                   disabled
                 />
@@ -113,7 +141,9 @@ const handleJoin = async (e: React.FormEvent) => {
         <Card>
           <CardHeader>
             <CardTitle>Entrar por Convite</CardTitle>
-            <CardDescription>Use um token de convite para acessar uma conta existente</CardDescription>
+            <CardDescription>
+              Use um token de convite para acessar uma conta existente
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleJoin} className="space-y-4">
@@ -123,11 +153,18 @@ const handleJoin = async (e: React.FormEvent) => {
                   id="token"
                   placeholder="Cole o token de convite aqui"
                   value={formData.token}
-                  onChange={(e) => setFormData({ ...formData, token: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, token: e.target.value })
+                  }
                   required
                 />
               </div>
-              <Button type="submit" variant="secondary" disabled={isJoining} className="w-full">
+              <Button
+                type="submit"
+                variant="secondary"
+                disabled={isJoining}
+                className="w-full"
+              >
                 {isJoining ? "Entrando..." : "Entrar com Token"}
                 {!isJoining && <UserPlus className="ml-2 h-4 w-4" />}
               </Button>
@@ -138,11 +175,15 @@ const handleJoin = async (e: React.FormEvent) => {
         {/* Logout */}
         <p className="text-center text-sm text-gray-600">
           Deseja sair?{" "}
-          <Button onClick={() => signOut({ callbackUrl: "/" })} variant="link" className="text-blue-600">
+          <Button
+            onClick={() => signOut({ callbackUrl: "/" })}
+            variant="link"
+            className="text-blue-600"
+          >
             Fazer logout
           </Button>
         </p>
       </div>
     </div>
-  )
+  );
 }

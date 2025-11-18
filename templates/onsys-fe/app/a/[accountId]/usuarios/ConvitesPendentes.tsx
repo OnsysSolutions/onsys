@@ -1,15 +1,20 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/_components/ui/card"
-import ConvitesEnviados from "./convites-enviados"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/_components/ui/card";
+import ConvitesEnviados from "./convites-enviados";
 
 export default function ConvitesPendentes({
   convites,
   accountId,
   handleDecline,
 }: {
-  convites: any[]
-  accountId: number
-  handleDecline: (conviteId: number) => Promise<any>
-
+  convites: any[];
+  accountId: number;
+  handleDecline: (conviteId: number) => Promise<any>;
 }) {
   return (
     <Card className="border-blue-200 bg-blue-50/50 dark:border-blue-900 dark:bg-blue-950/20">
@@ -25,10 +30,11 @@ export default function ConvitesPendentes({
         <div className="space-y-3">
           {convites.map((convite) => {
             const dias = Math.floor(
-              (Date.now() - new Date(convite.criadoEm).getTime()) / (1000 * 60 * 60 * 24)
-            )
+              (Date.now() - new Date(convite.criadoEm).getTime()) /
+                (1000 * 60 * 60 * 24),
+            );
             const dataEnvio =
-              dias === 0 ? "Hoje" : dias === 1 ? "Há 1 dia" : `Há ${dias} dias`
+              dias === 0 ? "Hoje" : dias === 1 ? "Há 1 dia" : `Há ${dias} dias`;
             return (
               <ConvitesEnviados
                 key={convite.id}
@@ -37,10 +43,10 @@ export default function ConvitesPendentes({
                 accountId={accountId}
                 handleDecline={handleDecline}
               />
-            )
+            );
           })}
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

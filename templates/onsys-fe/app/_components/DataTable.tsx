@@ -1,18 +1,25 @@
-"use client"
+"use client";
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/_components/ui/table"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/_components/ui/table";
 
 export interface DataTableColumn<T> {
-  key: keyof T | string
-  label: string
-  render?: (item: T) => React.ReactNode
+  key: keyof T | string;
+  label: string;
+  render?: (item: T) => React.ReactNode;
 }
 
 interface DataTableProps<T> {
-  columns: DataTableColumn<T>[]
-  data: T[]
-  actions?: (item: T) => React.ReactNode
-  emptyMessage?: string
+  columns: DataTableColumn<T>[];
+  data: T[];
+  actions?: (item: T) => React.ReactNode;
+  emptyMessage?: string;
 }
 
 export default function DataTable<T>({
@@ -44,18 +51,26 @@ export default function DataTable<T>({
             </TableRow>
           ) : (
             data.map((item, i) => (
-              <TableRow key={i} className="hover:bg-muted/40 transition-colors text-sm">
+              <TableRow
+                key={i}
+                className="hover:bg-muted/40 transition-colors text-sm"
+              >
                 {columns.map((col) => (
-                  <TableCell key={String(col.key)} className="py-3 px-4 break-words">
+                  <TableCell
+                    key={String(col.key)}
+                    className="py-3 px-4 break-words"
+                  >
                     {col.render ? col.render(item) : (item as any)[col.key]}
                   </TableCell>
                 ))}
-                {actions && <TableCell className="py-3 px-4">{actions(item)}</TableCell>}
+                {actions && (
+                  <TableCell className="py-3 px-4">{actions(item)}</TableCell>
+                )}
               </TableRow>
             ))
           )}
         </TableBody>
       </Table>
     </div>
-  )
+  );
 }

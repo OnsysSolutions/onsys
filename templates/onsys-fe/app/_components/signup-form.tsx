@@ -1,133 +1,151 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState, useTransition } from "react"
-import { Button } from "@/_components/ui/button"
-import { Input } from "@/_components/ui/input"
-import { Label } from "@/_components/ui/label"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/_components/ui/card"
-import Link from "next/link"
-import { ChevronLeft, ChevronRight, Check, Loader2 } from "lucide-react"
-import { signupAction } from "@/actions/signup"
-import { toast } from "sonner"
-import { useRouter } from "next/navigation"
-import { SignupData } from "@/_lib/types"
-import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/_components/ui/input-otp"
+import { Check, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import type React from "react";
+import { useState, useTransition } from "react";
+import { toast } from "sonner";
+import { Button } from "@/_components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/_components/ui/card";
+import { Input } from "@/_components/ui/input";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from "@/_components/ui/input-otp";
+import { Label } from "@/_components/ui/label";
+import type { SignupData } from "@/_lib/types";
 
 export function SignupForm() {
-  const [currentStep, setCurrentStep] = useState(1)
-  const [formData, setFormData] = useState<SignupData & { confirmarSenha: string; codigo?: string }>({
+  const [currentStep, setCurrentStep] = useState(1);
+  const [formData, setFormData] = useState<
+    SignupData & { confirmarSenha: string; codigo?: string }
+  >({
     nome: "",
     email: "",
     senha: "",
     confirmarSenha: "",
     codigo: "",
-  })
-  const [isPending, startTransition] = useTransition()
-  const [message, setMessage] = useState<string | null>(null)
-  const [isSending, setIsSending] = useState(false)
-  const [codeSent, setCodeSent] = useState(false)
-  const [isVerifying, setIsVerifying] = useState(false)
-  const router = useRouter()
+  });
+  const [isPending, startTransition] = useTransition();
+  const [_message, _setMessage] = useState<string | null>(null);
+  const [isSending, setIsSending] = useState(false);
+  const [codeSent, setCodeSent] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
+  const _router = useRouter();
 
-  const totalSteps = 3
+  const totalSteps = 3;
 
   const handleInputChange = (field: keyof typeof formData, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }))
-  }
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
 
   // === Enviar código de verificação ===
   const sendCode = async () => {
-    const { email } = formData
+    const { email } = formData;
     if (!email || !email.includes("@")) {
-      toast.error("Digite um e-mail válido antes de enviar o código.")
-      return
+      toast.error("Digite um e-mail válido antes de enviar o código.");
+      return;
     }
 
     try {
-      setIsSending(true)
+      setIsSending(true);
       const res = await fetch("/api/email/send-code", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
-      })
-      if (!res.ok) throw new Error("Falha ao enviar código.")
-      toast.success("Código enviado para seu e-mail!")
-      setCodeSent(true)
-    } catch (err: any) {
-      toast.error("Erro ao enviar código", { description: err.message })
+      });
+      if (!res.ok) throw new Error("Falha ao enviar código.");
+      toast.success("Código enviado para seu e-mail!");
+      setCodeSent(true);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        toast.error("Erro ao enviar código", { description: err.message });
+      } else {
+        toast.error("Erro ao enviar código");
+      }
     } finally {
-      setIsSending(false)
+      setIsSending(false);
     }
-  }
+  };
 
   // === Verificar código ===
   const verifyCode = async () => {
-    const { email, codigo } = formData
+    const { email, codigo } = formData;
     if (!codigo || codigo.trim().length !== 6) {
-      toast.error("Digite o código de 6 dígitos enviado para seu e-mail.")
-      return
+      toast.error("Digite o código de 6 dígitos enviado para seu e-mail.");
+      return;
     }
 
     try {
-      setIsVerifying(true)
+      setIsVerifying(true);
       const res = await fetch("/api/email/verify-code", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, codigo }),
-      })
-      if (!res.ok) throw new Error("Código inválido ou expirado.")
-      toast.success("Código verificado com sucesso!")
-      setCurrentStep(3)
-    } catch (err: any) {
-      toast.error(err.message || "Erro ao verificar código.")
+      });
+      if (!res.ok) throw new Error("Código inválido ou expirado.");
+      toast.success("Código verificado com sucesso!");
+      setCurrentStep(3);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        toast.error(err.message || "Erro ao verificar código.");
+      } else {
+        toast.error("Erro ao verificar código.");
+      }
     } finally {
-      setIsVerifying(false)
+      setIsVerifying(false);
     }
-  }
+  };
 
   const handleNext = () => {
     if (currentStep < totalSteps) {
-      setCurrentStep((prev) => prev + 1)
+      setCurrentStep((prev) => prev + 1);
     }
-  }
+  };
 
   const handleBack = () => {
     if (currentStep > 1) {
-      setCurrentStep((prev) => prev - 1)
+      setCurrentStep((prev) => prev - 1);
     }
-  }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    startTransition(async () => {
-      const res = await signupAction(formData)
-      setMessage(res.message)
-      if (res.success) {
-        toast.success("Conta criada com sucesso! Você já pode fazer login.")
-        router.push("/")
-      }
-    })
-  }
+    startTransition(async () => {});
+  };
 
   const isStepValid = () => {
     switch (currentStep) {
       case 1:
-        return formData.nome.trim() !== "" && formData.email.includes("@")
+        return formData.nome.trim() !== "" && formData.email.includes("@");
       case 2:
-        return !!formData.codigo && formData.codigo.length === 6
+        return !!formData.codigo && formData.codigo.length === 6;
       case 3:
-        return formData.senha.length >= 6 && formData.confirmarSenha === formData.senha
+        return (
+          formData.senha.length >= 6 &&
+          formData.confirmarSenha === formData.senha
+        );
       default:
-        return false
+        return false;
     }
-  }
+  };
 
   return (
     <Card className="w-full max-w-md border-border/50 shadow-xl">
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold text-center">Crie sua conta</CardTitle>
+        <CardTitle className="text-2xl font-bold text-center">
+          Crie sua conta
+        </CardTitle>
         <CardDescription className="text-center">
           Passo {currentStep} de {totalSteps}
         </CardDescription>
@@ -205,7 +223,9 @@ export function SignupForm() {
                   disabled={isSending}
                   className="flex-1"
                 >
-                  {isSending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                  {isSending && (
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  )}
                   {codeSent ? "Reenviar código" : "Enviar código"}
                 </Button>
                 <Button
@@ -214,7 +234,9 @@ export function SignupForm() {
                   disabled={isVerifying}
                   className="flex-1 font-semibold"
                 >
-                  {isVerifying && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                  {isVerifying && (
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  )}
                   Verificar
                 </Button>
               </div>
@@ -242,12 +264,16 @@ export function SignupForm() {
                   type="password"
                   placeholder="Digite a senha novamente"
                   value={formData.confirmarSenha}
-                  onChange={(e) => handleInputChange("confirmarSenha", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("confirmarSenha", e.target.value)
+                  }
                   required
                 />
                 {formData.confirmarSenha &&
                   formData.senha !== formData.confirmarSenha && (
-                    <p className="text-xs text-destructive">As senhas não coincidem</p>
+                    <p className="text-xs text-destructive">
+                      As senhas não coincidem
+                    </p>
                   )}
               </div>
             </div>
@@ -256,7 +282,12 @@ export function SignupForm() {
           {/* === Botões de navegação === */}
           <div className="flex gap-2 pt-4">
             {currentStep > 1 && (
-              <Button type="button" variant="outline" onClick={handleBack} className="flex-1">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleBack}
+                className="flex-1"
+              >
                 <ChevronLeft className="w-4 h-4 mr-2" />
                 Voltar
               </Button>
@@ -298,7 +329,9 @@ export function SignupForm() {
             <span className="w-full border-t border-border" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-card px-2 text-muted-foreground">Ou continue com</span>
+            <span className="bg-card px-2 text-muted-foreground">
+              Ou continue com
+            </span>
           </div>
         </div>
 
@@ -310,5 +343,5 @@ export function SignupForm() {
         </p>
       </CardFooter>
     </Card>
-  )
+  );
 }

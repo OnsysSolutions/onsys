@@ -1,28 +1,31 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/_components/ui/card"
+import { FileText, Layers, MapPin, Package, TrendingUp } from "lucide-react";
+import HeroSection from "@/_components/hero-section";
 import {
-  MapPin,
-  Layers,
-  Package,
-  FileText,
-  TrendingUp,
-} from "lucide-react"
-import HeroSection from "@/_components/hero-section"
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/_components/ui/card";
 
-export default async function DashboardPage({ params }: { params: Promise<{ accountId: string }> }) {
-  const { accountId } = await params
-  const id = Number(accountId)
+export default async function DashboardPage({
+  params,
+}: {
+  params: Promise<{ accountId: string }>;
+}) {
+  const { accountId } = await params;
+  const _id = Number(accountId);
 
-  const agora = new Date()
+  const _agora = new Date();
 
   // ============================================
   // CONSULTAS BÁSICAS DE QUANTIDADE
   // ============================================
 
   const formatChange = (novos: number, total: number) => {
-    if (novos === 0) return "Sem novos este mês"
-    const percent = total > 0 ? ((novos / total) * 100).toFixed(1) : "100"
-    return `+${novos} (${percent}%) este mês`
-  }
+    if (novos === 0) return "Sem novos este mês";
+    const percent = total > 0 ? ((novos / total) * 100).toFixed(1) : "100";
+    return `+${novos} (${percent}%) este mês`;
+  };
 
   // ============================================
   // ESTATÍSTICAS
@@ -52,7 +55,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ acco
       change: formatChange(2, 2),
       icon: FileText,
     },
-  ]
+  ];
 
   // ============================================
   // RENDER
@@ -62,7 +65,9 @@ export default async function DashboardPage({ params }: { params: Promise<{ acco
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Painel</h1>
-          <p className="text-muted-foreground">Visão geral do sistema de gestão de dados</p>
+          <p className="text-muted-foreground">
+            Visão geral do sistema de gestão de dados
+          </p>
         </div>
       </div>
 
@@ -71,7 +76,9 @@ export default async function DashboardPage({ params }: { params: Promise<{ acco
         {stats.map((stat) => (
           <Card key={stat.title}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                {stat.title}
+              </CardTitle>
               <stat.icon className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -85,12 +92,12 @@ export default async function DashboardPage({ params }: { params: Promise<{ acco
         ))}
       </div>
 
-       <HeroSection
+      <HeroSection
         title="Sistema de Registro de Plantões"
         city="São Miguel do Guaporé"
         imageSrc="/dashboard.png"
         imageAlt="Sistema de registro de plantões médicos e funerários"
       />
     </div>
-  )
+  );
 }

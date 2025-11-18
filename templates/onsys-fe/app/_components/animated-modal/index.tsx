@@ -1,15 +1,16 @@
 "use client";
-import { cn } from "@/_lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import React, {
-  ReactNode,
+import type React from "react";
+import {
   createContext,
+  type ReactNode,
   useContext,
   useEffect,
   useRef,
   useState,
 } from "react";
-import { useOnClickOutside } from "usehooks-ts"
+import { useOnClickOutside } from "usehooks-ts";
+import { cn } from "@/_lib/utils";
 
 interface ModalContextType {
   open: boolean;
@@ -30,7 +31,6 @@ export const ModalProvider = ({
   const [internalOpen, setInternalOpen] = useState(false);
   const open = controlledOpen ?? internalOpen;
   const setOpen = onOpenChange ?? setInternalOpen;
-
 
   return (
     <ModalContext.Provider value={{ open, setOpen }}>
@@ -63,7 +63,6 @@ export function Modal({
   );
 }
 
-
 export const ModalTrigger = ({
   children,
   className,
@@ -74,9 +73,10 @@ export const ModalTrigger = ({
   const { setOpen } = useModal();
   return (
     <button
+      type="button"
       className={cn(
         "px-4 py-2 rounded-md text-black dark:text-white text-center relative overflow-hidden",
-        className
+        className,
       )}
       onClick={() => setOpen(true)}
     >
@@ -104,7 +104,9 @@ export const ModalBody = ({
 
   const modalRef = useRef<HTMLDivElement>(null);
   const { setOpen } = useModal();
-  useOnClickOutside(modalRef as React.RefObject<HTMLElement>, () => setOpen(false));
+  useOnClickOutside(modalRef as React.RefObject<HTMLElement>, () =>
+    setOpen(false),
+  );
 
   return (
     <AnimatePresence>
@@ -129,7 +131,7 @@ export const ModalBody = ({
             ref={modalRef}
             className={cn(
               "min-h-[50%] max-h-[90%] md:max-w-[40%] bg-white dark:bg-neutral-950 border border-transparent dark:border-neutral-800 md:rounded-2xl relative z-50 flex flex-col flex-1 overflow-hidden",
-              className
+              className,
             )}
             initial={{
               opacity: 0,
@@ -188,7 +190,7 @@ export const ModalFooter = ({
     <div
       className={cn(
         "flex justify-end p-4 bg-gray-100 dark:bg-neutral-900",
-        className
+        className,
       )}
     >
       {children}
@@ -219,6 +221,7 @@ const CloseIcon = () => {
   const { setOpen } = useModal();
   return (
     <button
+      type="button"
       onClick={() => setOpen(false)}
       className="absolute top-4 right-4 group"
     >
@@ -234,6 +237,7 @@ const CloseIcon = () => {
         strokeLinejoin="round"
         className="text-black dark:text-white h-4 w-4 group-hover:scale-125 group-hover:rotate-3 transition duration-200"
       >
+        <title>Fechar</title>
         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
         <path d="M18 6l-12 12" />
         <path d="M6 6l12 12" />
@@ -241,4 +245,3 @@ const CloseIcon = () => {
     </button>
   );
 };
-

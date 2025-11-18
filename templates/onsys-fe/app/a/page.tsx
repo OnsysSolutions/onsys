@@ -1,16 +1,16 @@
-import { redirect } from "next/navigation"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/auth"
-import CreateOrJoinAccount from "@/_components/create-or-join-account"
+import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
+import CreateOrJoinAccount from "@/_components/create-or-join-account";
+import { authOptions } from "@/auth";
 
 export default async function DashboardBasePage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession(authOptions);
 
-  console.log(session)
+  console.log(session);
 
-  if (!session?.user?.id) redirect("/")
+  if (!session?.user?.id) redirect("/");
 
-  redirect("/a/1")
+  redirect("/a/1");
 
-  return <CreateOrJoinAccount />
+  return <CreateOrJoinAccount />;
 }

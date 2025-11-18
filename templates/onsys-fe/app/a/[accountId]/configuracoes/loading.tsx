@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader } from "@/_components/ui/card"
-import { Skeleton } from "@/_components/ui/skeleton"
+import { Card, CardContent, CardHeader } from "@/_components/ui/card";
+import { Skeleton } from "@/_components/ui/skeleton";
 
 export default function HistoricoLoading() {
   return (
@@ -33,5 +33,5 @@ export default function HistoricoLoading() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

@@ -1,6 +1,17 @@
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/_components/ui/card"
-import { Skeleton } from "@/_components/ui/skeleton"
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/_components/ui/tabs"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/_components/ui/card";
+import { Skeleton } from "@/_components/ui/skeleton";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/_components/ui/tabs";
 
 export default function UsuarioDetalheLoading() {
   return (
@@ -93,7 +104,10 @@ export default function UsuarioDetalheLoading() {
               </Card>
             </TabsContent>
 
-            <TabsContent value="estatisticas" className="grid gap-4 md:grid-cols-2">
+            <TabsContent
+              value="estatisticas"
+              className="grid gap-4 md:grid-cols-2"
+            >
               {Array.from({ length: 4 }).map((_, idx) => (
                 <Card key={idx}>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -112,5 +126,5 @@ export default function UsuarioDetalheLoading() {
         </div>
       </div>
     </div>
-  )
+  );
 }

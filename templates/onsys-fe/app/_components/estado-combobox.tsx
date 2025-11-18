@@ -1,21 +1,21 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Check, ChevronsUpDown } from "lucide-react"
-import { Button } from "@/_components/ui/button"
+import { Check, ChevronsUpDown } from "lucide-react";
+import { useState } from "react";
+import { Button } from "@/_components/ui/button";
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "@/_components/ui/command"
+} from "@/_components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/_components/ui/popover"
-import { cn } from "@/_lib/utils"
+} from "@/_components/ui/popover";
+import { cn } from "@/_lib/utils";
 
 const estados = [
   { value: "AC", label: "Acre" },
@@ -45,17 +45,17 @@ const estados = [
   { value: "SP", label: "São Paulo" },
   { value: "SE", label: "Sergipe" },
   { value: "TO", label: "Tocantins" },
-]
+];
 
 export function EstadoCombobox({ name }: { name: string }) {
-  const [open, setOpen] = useState(false)
-  const [value, setValue] = useState("")
-  const [search, setSearch] = useState("")
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState("");
+  const [search, setSearch] = useState("");
 
   // Filtra pelo label
   const filteredEstados = estados.filter((estado) =>
-    estado.label.toLowerCase().includes(search.toLowerCase())
-  )
+    estado.label.toLowerCase().includes(search.toLowerCase()),
+  );
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -88,15 +88,15 @@ export function EstadoCombobox({ name }: { name: string }) {
                 key={estado.value}
                 value={estado.value}
                 onSelect={(currentValue) => {
-                  setValue(currentValue)
-                  setOpen(false)
-                  setSearch("")
+                  setValue(currentValue);
+                  setOpen(false);
+                  setSearch("");
                 }}
               >
                 <Check
                   className={cn(
                     "mr-2 h-4 w-4",
-                    value === estado.value ? "opacity-100" : "opacity-0"
+                    value === estado.value ? "opacity-100" : "opacity-0",
                   )}
                 />
                 {`${estado.value} - ${estado.label}`}
@@ -108,5 +108,5 @@ export function EstadoCombobox({ name }: { name: string }) {
 
       <input type="hidden" name={name} value={value} />
     </Popover>
-  )
+  );
 }
